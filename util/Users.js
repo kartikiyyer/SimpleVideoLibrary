@@ -6,7 +6,7 @@ var mysql = require('./MySQLConnection');
 function insertUser(userDetails) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("INSERT INTO users (membership_no, issued_movies, outstanding_movies, member_types, balance_amount, role_id) VALUES(" + user.membershipNo + "," + user.issuedMovies + "," + user.outstandingMovies + ",'" + user.memberTypes + "'," + user.balanceAmount + "," + user.roleId + ")", function(error, results) {
+	connection.query("INSERT INTO users (membership_no, password,  firstname, lastname, issued_movies, outstanding_movies, member_types, balance_amount, role_id) VALUES(" + user.membershipNo + ", MD5(" + user.password + ")," +  user.firstname + "," +  user.lastname + "," +  user.issuedMovies + "," + user.outstandingMovies + ",'" + user.memberTypes + "'," + user.balanceAmount + "," + user.roleId + ")", function(error, results) {
 		if(!error) {
 			console.log(results);
 			if(results.length !== 0) {
@@ -27,7 +27,7 @@ exports.insertUser = insertUser;
 function editUser(user) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("UPDATE users SET membership_no = " + user.membershipNo + ", issued_movies = " + user.issuedMovies + ", outstanding_movies = " + user.outstandingMovies + ", member_types = '" + user.memberTypes + "', balance_amount = " + user.balanceAmount + ", role_id = " + user.roleId + "' WHERE userid  = " + user.userId, function(error, results) {
+	connection.query("UPDATE users SET membership_no = " + user.membershipNo + ", firstname = " + user.firstname + ", lastname = " + user.lastname + ", issued_movies = " + user.issuedMovies + ", outstanding_movies = " + user.outstandingMovies + ", member_types = '" + user.memberTypes + "', balance_amount = " + user.balanceAmount + ", role_id = " + user.roleId + "' WHERE userid  = " + user.userId, function(error, results) {
 		if(!error) {
 			console.log(results);
 			if(results.length !== 0) {
@@ -85,7 +85,46 @@ function selectUserById(callback, userId) {
 	//mysql.releasedbConnection(connection);
 }
 
+function selectUserByMembershipNo(callback, membershipNo) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	connection.query("SELECT * FROM users WHERE membership_no  = " + membershipNo, function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User details selected for " + membershipNo);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
 exports.selectUserById = selectUserById;
+
+function validateLogin(callback, membershipNo, password) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	connection.query("SELECT * FROM users WHERE membership_no  = '" + membershipNo + "' and password = MD5('" + password + "')", function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User details selected for " + membershipNo);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(error, results);
+		console.log("returning results");
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.validateLogin = validateLogin;
 
 function selectUsers(callback) {
 	var connection = mysql.createdbConnection();
@@ -107,7 +146,7 @@ function selectUsers(callback) {
 
 exports.selectUsers = selectUsers;
 
-function selectUserBySearchCriteria(callback, userId, membershipNo, minIssuedMovies, maxIssuedMovies, minOutstandingMovies, maxOutstandingMovies, memberTypes, minBalanceAmount, maxBalanceAmount, roleId) {
+function selectUserBySearchCriteria(callback, userId, membershipNo, firstname, lastname, minIssuedMovies, maxIssuedMovies, minOutstandingMovies, maxOutstandingMovies, memberTypes, minBalanceAmount, maxBalanceAmount, roleId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	var query = "SELECT * FROM users WHERE ";
@@ -121,6 +160,20 @@ function selectUserBySearchCriteria(callback, userId, membershipNo, minIssuedMov
 			query += " AND ";
 		}
 		query +=" membership_no = '" + membershipNo + "'";
+		andFlag = true;
+	}
+	if(firstname != "") {
+		if(andFlag) {
+			query += " AND ";
+		}
+		query +=" firstname = '" + firstname + "'";
+		andFlag = true;
+	}
+	if(lastname != "") {
+		if(andFlag) {
+			query += " AND ";
+		}
+		query +=" lastname = '" + lastname + "'";
 		andFlag = true;
 	}
 	if(minIssuedMovies != "" && maxIssuedMovies != "") {

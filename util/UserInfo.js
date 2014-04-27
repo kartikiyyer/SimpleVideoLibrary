@@ -7,7 +7,7 @@ var mysql = require('./MySQLConnection');
 function insertUserInfo(userInfo) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("INSERT INTO users_info (user_id, firstname, lastname, emailid, address, city, zip, zipextn) VALUES(" + userInfo.userId + ",'" + userInfo.firstName + "','" + userInfo.lastName + "','" + userInfo.emailId + "','" + userInfo.address + "','" + userInfo.city + "'," + userInfo.zip + "," + userInfo.zipextn + ")", function(error, results) {
+	connection.query("INSERT INTO users_info (user_id, emailid, address, city, zip, zipextn) VALUES(" + userInfo.userId + ",'" +  userInfo.emailId + "','" + userInfo.address + "','" + userInfo.city + "'," + userInfo.zip + "," + userInfo.zipextn + ")", function(error, results) {
 		if(!error) {
 			console.log(results);
 			if(results.length !== 0) {
@@ -27,11 +27,11 @@ exports.insertUserInfo = insertUserInfo;
 function editUserInfo(userInfo) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("UPDATE users_info SET firstname = '" + userInfo.firstName + "', lastname = '" + userInfo.lastName + "', emailid = '" + userInfo.emailId + "', address = '" + userInfo.address + "', city = '" + userInfo.city + "', zip = " + userInfo.zip + ", zipextn = " + userInfo.zipextn + " WHERE user_id  = " + userInfo.userId , function(error, results) {
+	connection.query("UPDATE users_info SET emailid = '" + userInfo.emailId + "', address = '" + userInfo.address + "', city = '" + userInfo.city + "', zip = " + userInfo.zip + ", zipextn = " + userInfo.zipextn + " WHERE user_id  = " + userInfo.userId , function(error, results) {
 		if(!error) {
 			console.log(results);
 			if(results.length !== 0) {
-				console.log("User Information edited for " + userInfo.movieId);
+				console.log("User Information edited for " + userInfo.userId);
 			}
 		} else {
 			console.log(error);
@@ -105,27 +105,13 @@ function getAllUsersInfo(callback) {
 
 exports.selectUsers = selectUsers;
 
-function selectUserInfoBySearchCriteria(callback, userId, firstName, lastName, emailId, address, city, zip, zipextn) {
+function selectUserInfoBySearchCriteria(callback, userId, emailId, address, city, zip, zipextn) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	var query = "SELECT * FROM users_info WHERE ";
 	var andFlag = false;
 	if(userId != "") {
 		query +=" user_id = '" + userId + "'";
-		andFlag = true;
-	}
-	if(firstName != "") {
-		if(andFlag) {
-			query += " AND ";
-		}
-		query +=" firstname = '" + firstName + "'";
-		andFlag = true;
-	}
-	if(lastName != "") {
-		if(andFlag) {
-			query += " AND ";
-		}
-		query +=" lastname = '" + lastName + "'";
 		andFlag = true;
 	}
 	if(emailId != "") {

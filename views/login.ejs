@@ -16,15 +16,15 @@
 
 		<h2><span class="fontawesome-lock"></span>Sign In</h2>
 
-		<form action="javascript:void(0);" method="POST">
+		<form action="/validateLogin" method="POST">
 
 			<fieldset>
 
 				<p><label for="memNo">Membership number</label></p>
-				<p><input type="memNo" id="memNo" value="9999-99-909" onBlur="if(this.value=='')this.value='9999-99-909'" onFocus="if(this.value=='9999-99-909')this.value=''"></p> <!-- JS because of IE support; better: placeholder="mail@address.com" -->
+				<p><input type="memNo" name = "membershipNo" id="membershipNo" value="9999-99-909" onBlur="if(this.value=='')this.value='9999-99-909'" onFocus="if(this.value=='9999-99-909')this.value=''"></p> <!-- JS because of IE support; better: placeholder="mail@address.com" -->
 
 				<p><label for="password">Password</label></p>
-				<p><input type="password" id="password" value="password" onBlur="if(this.value=='')this.value='password'" onFocus="if(this.value=='password')this.value=''"></p> <!-- JS because of IE support; better: placeholder="password" -->
+				<p><input type="password" name ="password" id="password" value="password" onBlur="if(this.value=='')this.value='password'" onFocus="if(this.value=='password')this.value=''"></p> <!-- JS because of IE support; better: placeholder="password" -->
 
 				<p><input type="submit" value="Sign In"></p>
 
