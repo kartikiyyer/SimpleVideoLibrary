@@ -9,7 +9,9 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
+<!--<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/jquery.jscroll.js"></script>-->
 
 </head>
 
@@ -33,8 +35,8 @@
 					<ul>
 					  <li><a href="createmember.ejs">Create member    </a></li>
 					  <li><a href="listmember.ejs">List Members   </a></li>
-					  <li><a href="createmovie.ejs">Create Movie   </a></li>
-					  <li><a href="listmovie.ejs">List Movies   </a></li>
+					  <li><a href="/createmovie">Create Movie   </a></li>
+					  <li><a href="/listmovie">List Movies   </a></li>
 					  <li><a href="issuemovie.ejs">Issue Movie   </a></li>
 					  <li><a href="submitmovie.ejs">Submit Movie  </a></li>  
 					  <li><a href="generatebill.ejs">Generate Bill  </a></li> 							
@@ -58,6 +60,7 @@
                     	<h1>List Movies: This Section lists all the movies and allows to edit and delete the same</h1>
                     </div>
                     <div class="templatemo_post_mid">
+                    <form method="POST" action="/listmovie-submit">
 						<p>Filter movies based on criteria below</p>     
 						<table style="margin-left:150px"><tr><td>
 							<table border="0">
@@ -75,7 +78,14 @@
 							
 							<tr>
 							<td><label for="releasedate">Release Date: </label> </td>
-							<td><input id="releasedate" name="releasedate" type="date"/></td>
+							<td><!--<input id="releasedate" name="releasedate" type="date"/>-->
+							<select id ="releasedate" name="releasedate">
+							<option value="">Select</option>
+							<% for(var i=0;i<releaseDates.length;i++) { %>
+								<option value="<%=releaseDates[i].release_date %>"><%=releaseDates[i].release_date %></option>
+							<% } %>
+							</select>
+							</td>
 							</tr>
 							<tr><td></td>
 							</tr>
@@ -87,17 +97,25 @@
 							
 							<tr>
 							<td><label for="category">Category: </label> </td>
-							<td><input id="category" maxlength="75" name="category" type="text" /> </td>
+							<td><!--<input id="category" maxlength="75" name="category" type="text" />--> 
+							<select id ="category" name="category">
+							<option value="">Select</option>
+							<% for(var i=0;i<categories.length;i++) { %>
+								<option value="<%=categories[i]%>"><%=categories[i]%></option>
+							<% } %>
+							</select>
+							</td>
 							</tr>
 							
 							<tr>
 							<td><label for="rentamount">Rent Amount: </label> </td>
-							<td><input id="rentamount" maxlength="25" name="rentamount" type="text" style="width:80px"/> </td>
+							<td><input id="rentamountmin" maxlength="25" name="rentamountmin" type="text" style="width:80px"/>
+							<input id="rentamountmax" maxlength="25" name="rentamountmax" type="text" style="width:80px"/> </td>
 							</tr>
 							
 							<tr>
 							<td><label for="copies">Is Available: </label> </td>
-							<td><input type="checkbox" name="isAvailable" value="isAvailable"> </td>
+							<td><input id="isAvaliable" type="checkbox" name="isAvailable" value="isAvailable"> </td>
 							</tr>
 							
 							<tr><td></td>
@@ -107,6 +125,31 @@
                         <table>
 						</table> 
 						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
+					</form>	
+					
+					<!-- This div lists down all the movies / searched movies -->
+					<div class="infinite-scroll">	
+                    <!-- List to display -->
+                    <% if(movies != null && movies.length > 0) {
+              
+                    	for(var i=0;i<movies.length;i++) {
+                    	//console.log(movies[i].movie_id);
+                    %>		
+                                        
+                    <%= movies[i].movie_name %>
+                    <%= movies[i].movie_banner %>
+                    <%= movies[i].release_date %>
+                    <%= movies[i].rent_amount %>
+                    <%= movies[i].available_copies %>
+                    <%= movies[i].category %>
+                    <a href="/editmovie/<%=movies[i].movie_id %>">Edit</a>
+                    <a href="/deletemovie/<%=movies[i].movie_id %>">Delete</a>
+                    <br/>
+                    <br/>
+                    <% } } %>
+                    </div>
+                    
+                    
                     </div>
                     <div class="templatemo_post_bottom">
                     
@@ -124,5 +167,13 @@
     
      
 <div align=center>Created by SJSU Spring 2014 students for CMPE 273 Class Project</div></body>
+
+<script type="text/javascript">
+//$(document).ready(function(){
+//$('.infinite-scroll').jscroll();
+//});
+
+</script>
+
 
 </html>

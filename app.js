@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var users = require("./routes/Users");
+var movie = require("./routes/Movie");
 var app = express();
 
 // all environments
@@ -34,6 +35,16 @@ if ('development' == app.get('env')) {
 app.get('/', users.login);
 app.get('/login', users.login);
 app.post('/validateLogin', users.validateLogin);
+
+//Movie related operations.
+app.get("/createmovie", movie.createmovie);
+app.post('/createmovie-submit', movie.createMovieSubmit);
+app.get("/listmovie",movie.listMovie);
+app.post("/listmovie-submit",movie.searchMovie);
+app.get("/editmovie/:id",movie.editMovie);
+app.post("/editmovie-submit",movie.editMovieSubmit);
+app.get("/deletemovie/:id",movie.deleteMovie);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

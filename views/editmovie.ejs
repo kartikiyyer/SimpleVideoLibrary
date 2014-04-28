@@ -59,23 +59,24 @@
                     	<h1>Create Movie</h1>
                     </div>
                     <div class="templatemo_post_mid">
-                    	<form method="POST" action="/createmovie-submit">
+                    	<form method="POST" action="/editmovie-submit">
+                    	<% console.log(movie); %>
                     	<table border="0">
 							<tbody>
 							
 							<tr>
 							<td><label for="mname">Movie Name*: </label> </td>
-							<td><input id="mname" maxlength="100" name="mname" type="text" /> </td>
+							<td><input id="mname" maxlength="100" name="mname" type="text" value="<%=movie.movie_name%>"/> </td>
 							</tr>
 							
 							<tr>
 							<td><label for="banner">Movie Banner: </label> </td>
-							<td><input id="banner" maxlength="45" name="banner" type="text" /> </td>
+							<td><input id="banner" maxlength="45" name="banner" type="text" value="<%=movie.movie_banner%>"/> </td>
 							</tr>
 							
 							<tr>
 							<td><label for="releasedate">Release Date: </label> </td>
-							<td><input id="releasedate" name="releasedate" type="text"/></td>
+							<td><input id="releasedate" name="releasedate" type="text" value="<%=movie.release_date%>"/></td>
 							</tr>
 
 							<tr>
@@ -84,9 +85,12 @@
 							
 							<select id ="category" name="category">
 							<option value="">Select</option>
-							<% for(var i=0;i<categories.length;i++) { %>
+							<% for(var i=0;i<categories.length;i++) { 
+								if(movie.category == categories[i]) {
+								%>	<option value="<%=categories[i]%>" selected><%=categories[i]%></option>
+								<% } else { %>
 								<option value="<%=categories[i]%>"><%=categories[i]%></option>
-							<% } %>
+							<% } } %>
 							</select>
 							
 							 </td>
@@ -94,12 +98,12 @@
 							
 							<tr>
 							<td><label for="rentamount">Rent Amount: </label> </td>
-							<td><input id="rentamount" maxlength="25" name="rentamount" type="text" style="width:80px"/> </td>
+							<td><input id="rentamount" maxlength="25" name="rentamount" type="text" style="width:80px" value="<%=movie.rent_amount%>"/> </td>
 							</tr>
 							
 							<tr>
 							<td><label for="copies">Number of Copies: </label> </td>
-							<td><input id="copies" maxlength="5" name="copies" type="text" style="width:40px"/> </td>
+							<td><input id="copies" maxlength="5" name="copies" type="text" style="width:40px" value="<%=movie.available_copies%>"/> </td>
 							</tr>
 							
 							<tr><td></td>
@@ -107,17 +111,20 @@
 							<tr>
 							<td align="right"><input name="Submit" type="submit" value="Submit" /></td>
 							</tr>
-
+				
 							</tbody></table>
+                			<input type="hidden" name="movieId" value="<%=movie.movie_id%>"/>
                            </form>
                            <%
-                            if(insertedresults!=null)
+                            if(editedresults!=null)
                             	{
                            %>
-                           <h1 style="color:yellow;">Movie Successfully Inserted</h1>
+                           <h1 style="color:yellow;">Movie Successfully Edited</h1>
                            <%
                        			}
-                           %>                   
+                           %>   
+                           
+                                           
                     </div>
                     <div class="templatemo_post_bottom">
                     

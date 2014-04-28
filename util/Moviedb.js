@@ -3,7 +3,7 @@
  */
 var mysql = require('./MySQLConnection');
 
-function insertMovie(movieDetails) {
+function insertMovie(callback, movieDetails) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	connection.query("INSERT INTO movie (movie_name, movie_banner, release_date, rent_amount, available_copies, category) VALUES('" + movieDetails.movieName + "','" + movieDetails.movieBanner + "','" + movieDetails.releaseDate + "','" + movieDetails.rentAmount + "','" + movieDetails.availableCopies + "','" + movieDetails.category + "')", function(error, results) {
@@ -15,6 +15,7 @@ function insertMovie(movieDetails) {
 		} else {
 			console.log(error);
 		}
+		callback(results, error);
 	});
 	mysql.closedbConnection(connection);
 	//mysql.releasedbConnection(connection);
@@ -22,7 +23,7 @@ function insertMovie(movieDetails) {
 
 exports.insertMovie = insertMovie;
 
-function editMovie(movieDetails) {
+function editMovie(callback, movieDetails) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	connection.query("UPDATE movie SET movie_name = '" + movieDetails.movieName + "', movie_banner = '" + movieDetails.movieBanner + "', release_date = '" + movieDetails.releaseDate + "', rent_amount = '" + movieDetails.rentAmount + "', available_copies = '" + movieDetails.availableCopies + "', category = '" + movieDetails.category + "' WHERE movie_id  = '" + movieDetails.movieId + "'", function(error, results) {
@@ -34,6 +35,7 @@ function editMovie(movieDetails) {
 		} else {
 			console.log(error);
 		}
+		callback(results, error);
 	});
 	mysql.closedbConnection(connection);
 	//mysql.releasedbConnection(connection);
@@ -41,7 +43,7 @@ function editMovie(movieDetails) {
 
 exports.editMovie = editMovie;
 
-function deleteMovie(movieId) {
+function deleteMovie(callback, movieId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	connection.query("DELETE FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
@@ -53,6 +55,7 @@ function deleteMovie(movieId) {
 		} else {
 			console.log(error);
 		}
+		callback(results, error);
 	});
 	mysql.closedbConnection(connection);
 	//mysql.releasedbConnection(connection);
@@ -63,7 +66,7 @@ exports.deleteMovie = deleteMovie;
 function selectMovieById(callback, movieId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("SELECT * FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
 		if(!error) {
 			//console.log(results);
 			if(results.length !== 0) {
@@ -83,7 +86,8 @@ exports.selectMovieById = selectMovieById;
 function selectMovies(callback) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("SELECT * FROM movie", function(error, results) {
+	// Limited to 5000 for development purpose.
+	connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie LIMIT 5000", function(error, results) {
 		if(!error) {
 			//console.log(results);
 			if(results.length !== 0) {
@@ -100,13 +104,20 @@ function selectMovies(callback) {
 
 exports.selectMovies = selectMovies;
 
-function selectMovieBySearchCriteria(callback, movieName, releaseDate, category, minPrice, maxPrice, isAvailable) {
+function selectMovieBySearchCriteria(callback, movieName, banner, releaseDate, category, minPrice, maxPrice, isAvailable) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	var query = "SELECT * FROM movie WHERE ";
+	var query = "SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE ";
 	var andFlag = false;
 	if(movieName != "") {
-		query +=" movie_name = '" + movieName + "'";
+		query +=" movie_name LIKE '%" + movieName + "%'";
+		andFlag = true;
+	}
+	if(banner != "") {
+		if(andFlag) {
+			query += " AND ";
+		}
+		query +=" movie_banner LIKE '%" + banner + "%'";
 		andFlag = true;
 	}
 	if(releaseDate != "") {
@@ -120,7 +131,7 @@ function selectMovieBySearchCriteria(callback, movieName, releaseDate, category,
 		if(andFlag) {
 			query += " AND ";
 		}
-		query +=" category = '" + category + "'";
+		query +=" category LIKE '%" + category + "%'";
 		andFlag = true;
 	}
 	if(minPrice != "" && maxPrice != "") {
@@ -136,7 +147,7 @@ function selectMovieBySearchCriteria(callback, movieName, releaseDate, category,
 		}
 		query +=" available_copies <> 0";
 	}
-	console.log("Query for selectMoviebysearchcriteria" + query);
+	console.log("Query for selectMoviebysearchcriteria: " + query);
 	connection.query(query, function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -153,3 +164,46 @@ function selectMovieBySearchCriteria(callback, movieName, releaseDate, category,
 }
 
 exports.selectMovieBySearchCriteria = selectMovieBySearchCriteria;
+
+function selectCategories(callback) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	// Limited to 5000 for development purpose.
+	connection.query("SELECT DISTINCT(category) AS category FROM movie ORDER BY category ASC", function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("Movie category selected");
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.selectCategories = selectCategories;
+
+
+function selectReleaseDate(callback) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	// Limited to 5000 for development purpose.
+	connection.query("SELECT DISTINCT(release_date) AS release_date FROM movie ORDER BY release_date ASC", function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("Movie release date selected");
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.selectReleaseDate = selectReleaseDate;
