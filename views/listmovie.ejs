@@ -5,7 +5,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-
+<style>
+.small_bottom{
+    float:left;
+    height:50px;
+    width:50px;
+    margin:5px;
+}
 </style>
 <title>Video Library</title>
 
@@ -126,30 +132,33 @@
 						</table> 
 						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
 					</form>	
-					
-					<!-- This div lists down all the movies / searched movies -->
-					<div class="infinite-scroll">	
                     <!-- List to display -->
+                    <table style="height:400px; overflow:auto; border:1; border-color:"#FFFFFF""><tr>
+                    <th style="color:white;>Movie Name</th>
+                    <th style="color:white;">Banner</th>
+                    <th style="color:white;">Release Date</th>
+                    <th style="color:white;">Rent Amount</th>
+                    <th style="color:white;">Available Copies</th>
+                    <th style="color:white;">Category</th>
+                    <th style="color:white;">Edit</th>
+                    <th style="color:white;">Delete</th>
+                    </tr>
                     <% if(movies != null && movies.length > 0) {
               
                     	for(var i=0;i<movies.length;i++) {
                     	//console.log(movies[i].movie_id);
-                    %>		
-                                        
-                    <%= movies[i].movie_name %>
-                    <%= movies[i].movie_banner %>
-                    <%= movies[i].release_date %>
-                    <%= movies[i].rent_amount %>
-                    <%= movies[i].available_copies %>
-                    <%= movies[i].category %>
-                    <a href="/editmovie/<%=movies[i].movie_id %>">Edit</a>
-                    <a href="/deletemovie/<%=movies[i].movie_id %>">Delete</a>
-                    <br/>
-                    <br/>
-                    <% } } %>
-                    </div>
-                    
-                    
+                    %>
+	                    <tr><td><%= movies[i].movie_name %></td>
+	                    <td><%= movies[i].movie_banner %></td>
+	                    <td><%= movies[i].release_date %></td>
+	                    <td><%= movies[i].rent_amount %></td>
+	                    <td><%= movies[i].available_copies %></td>
+	                    <td><%= movies[i].category %></td>
+	                    <td><a href="/editmovie/<%=movies[i].movie_id %>">Edit</a></td>
+	                    <td><a href="/deletemovie/<%=movies[i].movie_id %>">Delete</a></td>
+	                    </tr>
+	                    <% } } %>
+                    </table>
                     </div>
                     <div class="templatemo_post_bottom">
                     
