@@ -5,8 +5,75 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+<script type="text/javascript">
 
-</style>
+   function allnumeric(inputtxt)  
+   {  
+	 
+	 var numbers = /^[0-9]+$/;  
+	 if(inputtxt.match(numbers))  
+	 {  
+	  return true;  
+	 }  
+	 else  
+	 {
+	  return false;  
+	 }  
+   }
+   
+   function validateEmail(mail)   
+	{  
+	 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))  
+	  {  
+		return (true);
+	  }  
+	  return (false);
+	}  
+
+
+	function validateCreateMember()   
+   {
+	
+     if(document.createmember.fname.value==null ||document.createmember.fname.value == ''){
+			alert('Member First Name cannot be blank');
+			return false;
+		} 
+		if(document.createmember.lname.value==null ||document.createmember.lname.value == ''){
+			alert('Member Last Name cannot be blank');
+			return false;
+		}
+		if(document.createmember.email.value==null ||document.createmember.email.value == ''){
+			alert('Email Address cannot be blank');
+			return false;
+		} else if(!validateEmail(document.createmember.email.value)){
+			alert('Enter valid Email address of the member');
+			return false;
+		} 
+		if(document.createmember.address.value==null ||document.createmember.address.value == ''){
+			alert('Address Line 1 cannot be blank');
+			return false;
+		}
+		if(document.createmember.city.value==null ||document.createmember.city.value == ''){
+			alert('City value cannot be blank');
+			return false;
+		}
+
+		if(document.createmember.zip1.value==null ||document.createmember.zip1.value == ''){
+			alert('Please enter Zip Code');
+			return false;
+		}else if(!allnumeric(document.createmember.zip1.value) && document.createmember.zip1.value.length != 5){
+			alert('Enter valid Zip Code for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
+			return false;
+		}
+		
+		if(document.createmember.zip2.value != '' && !allnumeric(document.createmember.zip2.value) && document.createmember.zip2.value.length!=4){
+			alert('Enter valid Zip Code for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
+			return false;
+		}
+    }
+</script>
+
+
 <title>Video Library</title>
 
 <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
@@ -58,6 +125,7 @@
                     	<h1>Create Member</h1>
                     </div>
                     <div class="templatemo_post_mid">
+                    <form name="createmember" onsubmit="return validateCreateMember()" method="post">
                     	<table border="0">
 							<tbody>
 
@@ -99,7 +167,7 @@
 							
 							<tr>
 							<td><label for="zip1">Zip Code*: </label> </td>
-							<td><input id="zip1" maxlength="50" name="zip1" type="text" style="width:50px"/> - <input id="zip2" maxlength="50" name="zip2" type="text" style="width:50px"/> </td>
+							<td><input id="zip1" maxlength="5" name="zip1" type="text" style="width:50px"/> - <input id="zip2" maxlength="4" name="zip2" type="text" style="width:50px"/> </td>
 							</tr>
 
 							<tr>
@@ -121,7 +189,7 @@
 							</tr>
 
 							</tbody></table>
-                                                
+                            </form>
                     </div>
                     <div class="templatemo_post_bottom">
                     
