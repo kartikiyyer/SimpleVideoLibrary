@@ -35,6 +35,8 @@ if ('development' == app.get('env')) {
 app.get('/', users.login);
 app.get('/login', users.login);
 app.post('/validateLogin', users.validateLogin);
+app.get('/createmember', users.createmember);
+app.post('/createmember-submit', users.createMemberSubmit);
 
 //Movie related operations.
 app.get("/createmovie", movie.createmovie);

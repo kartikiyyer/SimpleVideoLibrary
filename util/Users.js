@@ -3,18 +3,18 @@
  */
 var mysql = require('./MySQLConnection');
 
-function insertUser(userDetails) {
+function insertUser(callback,user) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("INSERT INTO users (membership_no, password,  firstname, lastname, issued_movies, outstanding_movies, member_types, balance_amount, role_id) VALUES(" + user.membershipNo + ", MD5(" + user.password + ")," +  user.firstname + "," +  user.lastname + "," +  user.issuedMovies + "," + user.outstandingMovies + ",'" + user.memberTypes + "'," + user.balanceAmount + "," + user.roleId + ")", function(error, results) {
+	connection.query("INSERT INTO users (membership_no, password,  firstname, lastname, issued_movies, outstanding_movies, member_type, balance_amount, role_id) VALUES('" + user.membershipNo + "', MD5('" + user.password + "'),'" +  user.firstname + "','" +  user.lastname + "','" +  user.issuedMovies + "','" + user.outstandingMovies + "','" + user.memberType + "','" + user.balanceAmount + "','" + user.roleId + "')", function(error, results) {
 		if(!error) {
-			console.log(results);
 			if(results.length !== 0) {
 				console.log("User details inserted");
 			}
 		} else {
-			console.log(error);
+			console.log("Insert User : " + error);
 		}
+		callback(results, error);
 	});
 	mysql.closedbConnection(connection);
 	//mysql.releasedbConnection(connection);
@@ -86,16 +86,21 @@ function selectUserById(callback, userId) {
 }
 
 function selectUserByMembershipNo(callback, membershipNo) {
+	console.log("membership no param: " + membershipNo);
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("SELECT * FROM users WHERE membership_no  = " + membershipNo, function(error, results) {
-		if(!error) {
-			//console.log(results);
-			if(results.length !== 0) {
+	connection.query("SELECT * FROM users WHERE membership_no  = '" + membershipNo + "'" , function(error, results) 
+	{
+		if(!error) 
+		{
+			console.log(results);
+			if(results.length !== 0) 
+			{
 				console.log("User details selected for " + membershipNo);
 			}
-		} else {
-			console.log(error);
+		} else 
+		{
+			console.log("Error from SelectUserbyMemId: " + error);
 		}
 		callback(results, error);
 	});
@@ -103,7 +108,7 @@ function selectUserByMembershipNo(callback, membershipNo) {
 	//mysql.releasedbConnection(connection);
 }
 
-exports.selectUserById = selectUserById;
+exports.selectUserByMembershipNo = selectUserByMembershipNo;
 
 function validateLogin(callback, membershipNo, password) {
 	var connection = mysql.createdbConnection();

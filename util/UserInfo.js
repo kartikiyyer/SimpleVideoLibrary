@@ -4,18 +4,19 @@
 var mysql = require('./MySQLConnection');
 
 
-function insertUserInfo(userInfo) {
+function insertUserInfo(callback, userInfo) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	connection.query("INSERT INTO users_info (user_id, emailid, address, city, zip, zipextn) VALUES(" + userInfo.userId + ",'" +  userInfo.emailId + "','" + userInfo.address + "','" + userInfo.city + "'," + userInfo.zip + "," + userInfo.zipextn + ")", function(error, results) {
+	connection.query("INSERT INTO users_info (user_id, emailid, address, city, zip, zipextn) VALUES('" + userInfo.userId + "','" +  userInfo.emailId + "','" + userInfo.address + "','" + userInfo.city + "','" + userInfo.zip + "','" + userInfo.zipextn + "')", function(error, results) {
 		if(!error) {
 			console.log(results);
 			if(results.length !== 0) {
 				console.log("User Information inserted");
 			}
 		} else {
-			console.log(error);
+			console.log("Error in insert user_info query: " + error);
 		}
+		callback(results, error);
 	});
 	mysql.closedbConnection(connection);
 	//mysql.releasedbConnection(connection);
@@ -41,7 +42,7 @@ function editUserInfo(userInfo) {
 	//mysql.releasedbConnection(connection);
 }
 
-exports.editMovie = editMovie;
+exports.editUserInfo = editUserInfo;
 
 
 function deleteUserInfo(userId) {
@@ -85,6 +86,26 @@ function getUserInfoById(callback, userId) {
 
 exports.getUserInfoById = getUserInfoById;
 
+function getUserInfoByEmail(callback, email) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	connection.query("SELECT * FROM users_info WHERE emailid  = '" + email + "'", function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User Information selected for " + email);
+			}
+		} else {
+			console.log("Error in selectbyEmail query: " + error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.getUserInfoByEmail = getUserInfoByEmail;
+
 function getAllUsersInfo(callback) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
@@ -103,7 +124,7 @@ function getAllUsersInfo(callback) {
 	//mysql.releasedbConnection(connection);
 }
 
-exports.selectUsers = selectUsers;
+exports.getAllUsersInfo = getAllUsersInfo;
 
 function selectUserInfoBySearchCriteria(callback, userId, emailId, address, city, zip, zipextn) {
 	var connection = mysql.createdbConnection();
@@ -165,4 +186,4 @@ function selectUserInfoBySearchCriteria(callback, userId, emailId, address, city
 	//mysql.releasedbConnection(connection);
 }
 
-exports.selectUserInfoBySearchCriteria = selectUserBySearchCriteria;
+exports.selectUserInfoBySearchCriteria = selectUserInfoBySearchCriteria;

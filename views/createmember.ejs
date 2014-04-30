@@ -125,24 +125,24 @@
                     	<h1>Create Member</h1>
                     </div>
                     <div class="templatemo_post_mid">
-                    <form name="createmember" onsubmit="return validateCreateMember()" method="post">
+                    <form name="createmember" onsubmit="return validateCreateMember()" action="/createmember-submit" method="post">
                     	<table border="0">
 							<tbody>
 
 							<tr>
 							<td><label for="name">Member type: </label> </td>
-							<td><input type="radio" name="memType" value="S">Simple
-								<input type="radio" name="memType" value="P">Premium </td>
+							<td><input type="radio" name="memberType" value="S">Simple
+								<input type="radio" name="memberType" value="P">Premium </td>
 							</tr>
 							
 							<tr>
 							<td><label for="fname">First Name*: </label> </td>
-							<td><input id="fname" maxlength="45" name="fname" type="text" /> </td>
+							<td><input id="fname" maxlength="45" name="firstname" type="text" /> </td>
 							</tr>
 							
 							<tr>
 							<td><label for="lname">Last Name*: </label> </td>
-							<td><input id="lname" maxlength="45" name="lname" type="text" /> </td>
+							<td><input id="lname" maxlength="45" name="lastname" type="text" /> </td>
 							</tr>
 							
 							<tr>
@@ -178,8 +178,8 @@
 							<tr>
 							<td><label for="role">Role*:</label></td>
 							<td><select id="role">
-									  <option value="user">User</option>
-									  <option value="admin">Admin</option>
+									  <option value="2">User</option>
+									  <option value="1">Admin</option>
 								</select></td>
 							</tr>
 							<tr><td></td>
@@ -190,6 +190,14 @@
 
 							</tbody></table>
                             </form>
+                            <%
+                            if(insertedresults!=null)
+                            	{
+                           %>
+                           <h1 style="color:yellow;"><%=insertedresults%></h1>
+                           <%
+                       			}
+                           %>    
                     </div>
                     <div class="templatemo_post_bottom">
                     
