@@ -64,15 +64,44 @@
 								<td><label for="membershipNo">Membership Number: </label> </td>
 								<td><input id="membershipNo" maxlength="75" name="membershipNo" type="text"/></td>
 							</tr>
-							<tr>
-								<td><label for="movieName">Movie Name: </label> </td>
-								<td><input id="movieName" maxlength="75" name="movieName" type="text"/></td>
-							</tr>
 						</tbody></table>
 						<br/>
 						<div><input name="Submit" type="submit" value="Submit" style="width:70px; align:right; margin-left:100px"/></div>
 						</div>
                         <div class="clear"></div>
+                        <br/>
+                        <table style="margin-left:150px"><tr><td>
+							<table border="0">
+							<tbody>
+							
+							<tr>
+							<td><label for="mname">Movie Name: </label> </td>
+							<td><input id="mname" maxlength="100" name="mname" type="text" /> </td>
+							</tr>
+							
+							</tbody></table>
+						</td>
+						<td>
+							<table border="0">
+							<tbody>
+							
+							<tr>
+							<td><label for="category">Category: </label> </td>
+							<td><!--<input id="category" maxlength="75" name="category" type="text" />--> 
+							<select id ="category" name="category">
+							<option value="">Select</option>
+							<% for(var i=0;i<categories.length;i++) { %>
+								<option value="<%=categories[i]%>"><%=categories[i]%></option>
+							<% } %>
+							</select>
+							</td>
+							</tr>
+							
+							</tbody></table>
+						</tr></table>
+                        <table>
+						</table> 
+						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
                         
                     </div>
                     <div class="templatemo_post_bottom">
