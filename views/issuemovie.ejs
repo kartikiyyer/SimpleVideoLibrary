@@ -21,24 +21,25 @@
 		
         	<div id="templatemo_header">
 				<div id="templatemo_logo_section">            
-		        	<h1><a href="index.ejs">Video Library</a></h1>          
+		        	<h1><a href="/">Video Library</a></h1>          
 					<h2>Store for all movies: Comedy, Thriller, Action, Romantic, Documentary</h2>
 				</div>
 				<div id="templatemo_user_section">            
-		        	Welcome User!!
+		        	Welcome <%= userDet.firstname %>!!
+		        	<a href="/sign-out?nocache=1">Sign Out</a>
 				</div>
          	</div><!-- end of headder -->
             <div id="templatemo_menu_panel"> 
 				<div id="templatemo_menu_section">                
 					<div id="templatemo_menu_section">
 						<ul>
-						  <li><a href="createmember.ejs">Create member    </a></li>
-						  <li><a href="listmember.ejs">List Members   </a></li>
-						  <li><a href="createmovie.ejs">Create Movie   </a></li>
-						  <li><a href="listmovie.ejs">List Movies   </a></li>
-						  <li><a href="issuemovie.ejs">Issue Movie   </a></li>
-						  <li><a href="submitmovie.ejs">Submit Movie  </a></li>  
-						  <li><a href="generatebill.ejs">Generate Bill  </a></li> 							
+						  <li><a href="/createmember?nocache=1">Create member    </a></li>
+						  <li><a href="/listmember?nocache=1">List Members   </a></li>
+						  <li><a href="/createmovie?nocache=1">Create Movie   </a></li>
+						  <li><a href="/listmovie?nocache=1">List Movies   </a></li>
+						  <li><a href="/issuemovie?nocache=1">Issue Movie   </a></li>
+						  <li><a href="/submitmovie?nocache=1">Submit Movie  </a></li>  
+						  <li><a href="/generatebill?nocache=1">Generate Bill  </a></li> 							
 						</ul> 		
 					</div>
 				</div>

@@ -16,8 +16,8 @@
 <title>Video Library</title>
 
 <link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
-<!--<script src="/js/jquery-1.10.2.js"></script>
-<script src="/js/jquery.jscroll.js"></script>-->
+<script src="/js/jquery-1.10.2.js"></script>
+<!--<script src="/js/jquery.jscroll.js"></script>-->
 
 </head>
 
@@ -28,24 +28,25 @@
 		
         	<div id="templatemo_header">
 				<div id="templatemo_logo_section">            
-		        	<h1><a href="index.ejs">Video Library</a></h1>          
+		        	<h1><a href="/">Video Library</a></h1>          
 					<h2>Store for all movies: Comedy, Thriller, Action, Romantic, Documentary</h2>
 				</div>
 				<div id="templatemo_user_section">            
-		        	Welcome User!!
+		        	Welcome <%= userDet.firstname %>!!
+		        	<a href="/sign-out?nocache=1">Sign Out</a>
 				</div>
          	</div><!-- end of headder -->
                <div id="templatemo_menu_panel"> 
 				<div id="templatemo_menu_section">
 					
 					<ul>
-					  <li><a href="createmember.ejs">Create member    </a></li>
-					  <li><a href="listmember.ejs">List Members   </a></li>
-					  <li><a href="/createmovie">Create Movie   </a></li>
-					  <li><a href="/listmovie">List Movies   </a></li>
-					  <li><a href="issuemovie.ejs">Issue Movie   </a></li>
-					  <li><a href="submitmovie.ejs">Submit Movie  </a></li>  
-					  <li><a href="generatebill.ejs">Generate Bill  </a></li> 							
+					  <li><a href="/createmember?nocache=1">Create member    </a></li>
+					  <li><a href="/listmember?nocache=1">List Members   </a></li>
+					  <li><a href="/createmovie?nocache=1">Create Movie   </a></li>
+					  <li><a href="/listmovie?nocache=1">List Movies   </a></li>
+					  <li><a href="/issuemovie?nocache=1">Issue Movie   </a></li>
+					  <li><a href="/submitmovie?nocache=1">Submit Movie  </a></li>  
+					  <li><a href="/generatebill?nocache=1">Generate Bill  </a></li> 							
 					</ul> 
 						
 					</div>
@@ -83,7 +84,7 @@
 							</tr>
 							
 							<tr>
-							<td><label for="releasedate">Release Date: </label> </td>
+							<td><label for="releasedate">Release Year: </label> </td>
 							<td><!--<input id="releasedate" name="releasedate" type="date"/>-->
 							<select id ="releasedate" name="releasedate">
 							<option value="">Select</option>
@@ -115,8 +116,8 @@
 							
 							<tr>
 							<td><label for="rentamount">Rent Amount: </label> </td>
-							<td><input id="rentamountmin" maxlength="25" name="rentamountmin" type="text" style="width:80px"/>
-							<input id="rentamountmax" maxlength="25" name="rentamountmax" type="text" style="width:80px"/> </td>
+							<td><input id="rentamountmin" placeholder="min" maxlength="25" name="rentamountmin" type="number" style="width:80px"/>
+							<input id="rentamountmax" placeholder="max" maxlength="25" name="rentamountmax" type="number" style="width:80px"/> </td>
 							</tr>
 							
 							<tr>
@@ -132,14 +133,19 @@
 						</table> 
 						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
 					</form>	
+					<br/>
+					<br/>
                     <!-- List to display -->
-                    <table style="height:400px; overflow:auto; border:1; border-color:"#FFFFFF""><tr>
-                    <th style="color:white;>Movie Name</th>
+                    <table class="listData" border=1>
+                    <tr>
+                    <th style="color:white;">Sr. No.</th>
+                    <th style="color:white;">Movie Name</th>
                     <th style="color:white;">Banner</th>
-                    <th style="color:white;">Release Date</th>
+                    <th style="color:white;">Release Year</th>
                     <th style="color:white;">Rent Amount</th>
                     <th style="color:white;">Available Copies</th>
                     <th style="color:white;">Category</th>
+                    <th style="color:white;">View</th>
                     <th style="color:white;">Edit</th>
                     <th style="color:white;">Delete</th>
                     </tr>
@@ -148,14 +154,17 @@
                     	for(var i=0;i<movies.length;i++) {
                     	//console.log(movies[i].movie_id);
                     %>
-	                    <tr><td><%= movies[i].movie_name %></td>
+	                    <tr>
+	                    <td><%= i+1 %></td>
+	                    <td><%= movies[i].movie_name %></td>
 	                    <td><%= movies[i].movie_banner %></td>
 	                    <td><%= movies[i].release_date %></td>
 	                    <td><%= movies[i].rent_amount %></td>
 	                    <td><%= movies[i].available_copies %></td>
-	                    <td><%= movies[i].category %></td>
-	                    <td><a href="/editmovie/<%=movies[i].movie_id %>">Edit</a></td>
-	                    <td><a href="/deletemovie/<%=movies[i].movie_id %>">Delete</a></td>
+	                    <td width="30px"><%= movies[i].category %></td>
+	                    <td><a href="/movie/<%=movies[i].movie_id %>?nocache=1">View</a></td>
+	                    <td><a href="/editmovie/<%=movies[i].movie_id %>?nocache=1">Edit</a></td>
+	                    <td><a href="/deletemovie/<%=movies[i].movie_id %>?nocache=1">Delete</a></td>
 	                    </tr>
 	                    <% } } %>
                     </table>

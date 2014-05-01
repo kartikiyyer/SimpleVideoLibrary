@@ -266,7 +266,7 @@ a:hover { color: #FFFFFF; }
 
 .templatemo_post_top {
 	
-	width: 900px;
+	width: 909px;
 	height: 47px;
 	background: url(images/templatemo_post_top.jpg) no-repeat;
 	
@@ -289,16 +289,17 @@ a:hover { color: #FFFFFF; }
 
 .templatemo_post_mid {
 	
-	width: 900px;
-	height: 500px;
-	background: url(images/templatemo_post_middle.jpg) repeat-y;
+	width: 909px;
+	/*height: 500px;*/
+	/*background: url(images/templatemo_post_middle.jpg) repeat-y;*/
+	background-color:darkblue;
 	padding-top: 15px;
 
 }
 
 .templatemo_post_bottom {
 	
-	width: 900px;
+	width: 909px;
 	height: 39px;
 	background: url(images/templatemo_post_bottom.jpg) no-repeat;
 	
@@ -323,9 +324,30 @@ a:hover { color: #FFFFFF; }
 
 .templatemo_post_mid table{
 	
+	cell-spacing: 5;
+	border:1; 
+	cell-padding: 15px;
+
+}
+
+.templatemo_post_mid table tbody tr td{
 	
+	padding-left:15px;
 	cell-spacing: 15px;
 	cell-padding: 15px;
+	font-size: 12px;
+	color:#fff;
+	margin : 0px 25px 25px 25px;
+	text-align: justify;
+
+}
+
+.listData{
+	cell-spacing: 5;
+	border:1; 
+	cell-padding: 15px;
+	background-color: black;
+	table-layout: fixed;
 
 }
 

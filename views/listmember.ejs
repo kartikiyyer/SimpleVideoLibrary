@@ -9,7 +9,7 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -20,24 +20,25 @@
 		
         	<div id="templatemo_header">
 				<div id="templatemo_logo_section">            
-		        	<h1><a href="index.html">Video Library</a></h1>            
+		        	<h1><a href="/">Video Library</a></h1>            
 					<h2>Store for all movies: Comedy, Thriller, Action, Romantic, Documentary</h2>
 				</div>
 				<div id="templatemo_user_section">            
-		        	Welcome User!!
+		        	Welcome <%= userDet.firstname %>!!
+		        	<a href="/sign-out?nocache=1">Sign Out</a>
 				</div>
          	</div><!-- end of headder -->
                <div id="templatemo_menu_panel"> 
     		<div id="templatemo_menu_section">
                 
             		<ul>
-						  <li><a href="createmember.html">Create member    </a></li>
-						  <li><a href="listmember.html">List Members   </a></li>
-						  <li><a href="createmovie.html">Create Movie   </a></li>
-						  <li><a href="listmovie.html">List Movies   </a></li>
-						  <li><a href="issuemovie.html">Issue Movie   </a></li>
-						  <li><a href="submitmovie.html">Submit Movie  </a></li>  
-						  <li><a href="generatebill.html">Generate Bill  </a></li> 
+						  <li><a href="/createmember?nocache=1">Create member    </a></li>
+						  <li><a href="/listmember?nocache=1">List Members   </a></li>
+						  <li><a href="/createmovie?nocache=1">Create Movie   </a></li>
+						  <li><a href="/listmovie?nocache=1">List Movies   </a></li>
+						  <li><a href="/issuemovie?nocache=1">Issue Movie   </a></li>
+						  <li><a href="/submitmovie?nocache=1">Submit Movie  </a></li>  
+						  <li><a href="/generatebill?nocache=1">Generate Bill  </a></li> 
 					</ul>  
                     
 				</div>
@@ -58,7 +59,8 @@
                     	<h1>List Members: This Section lists all the members and allows to edit and delete the same</h1>
                     </div>
                     <div class="templatemo_post_mid">
-						<p>Filter members based on criteria below</p>     
+                    <form method="POST" action="/listmember-submit">
+						<p>Filter members based on criteria below</p>
 						<table style="margin-left:50px"><tr><td>
 							<table border="0">
 							<tbody>
@@ -98,6 +100,10 @@
 							<td><label for="city">City*: </label> </td>
 							<td><input id="city" maxlength="50" name="city" type="text" /> </td>
 							</tr>
+							<tr>
+							<td><label for="state">State: </label> </td>
+							<td><input id="state" maxlength="50" name="state" type="text" /> </td>
+							</tr>
 							
 							<tr>
 							<td><label for="zip1">Zip Code*: </label> </td>
@@ -112,6 +118,48 @@
 						</table> 
 						<br/>
 						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
+                    	</form>
+                    	<br/>
+						<br/>
+                    <!-- Listing members -->
+                    <table class="listData" border=1>
+                    <tr>
+                    <th style="color:white;">Sr. No.</th>
+                    <th style="color:white;">Membership No.</th>
+                    <th style="color:white;">First Name</th>
+                    <th style="color:white;">Last Name</th>
+                    <th style="color:white;">Issued Movies</th>
+                    <th style="color:white;">Outstanding Movies</th>
+                    <th style="color:white;">Member Type</th>
+                    <th style="color:white;">Balance Amount</th>
+                    <th style="color:white;">Edit</th>
+                    <th style="color:white;">Delete</th>
+                    </tr>
+                    <% if(members != null && members.length > 0) {
+              
+                    	for(var i=0;i<members.length;i++) {
+                    	//console.log(members[i].membership_no);
+                    %>
+	                    <tr>
+	                    <td><%= i+1 %></td>
+	                    <td><%= members[i].membership_no %></td>
+	                    <td><%= members[i].firstname %></td>
+	                    <td><%= members[i].lastname %></td>
+	                    <td><%= members[i].issued_movies %></td>
+	                    <td><%= members[i].outstanding_movies %></td>
+	                    <td width="30px">
+	                    <% if(members[i].member_type == "S") { %>
+	                    Simple
+	                    <% } else { %>
+	                    Premium
+	                    <% } %>
+	                    </td>
+	                    <td><%= members[i].balance_amount %></td>
+	                    <td><a href="/editmember/<%=members[i].user_id %>">Edit</a></td>
+	                    <td><a href="/deletemember/<%=members[i].user_id %>">Delete</a></td>
+	                    </tr>
+	                    <% } } %>
+                    </table>
                     </div>
                     <div class="templatemo_post_bottom">
                     

@@ -9,7 +9,7 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -20,11 +20,12 @@
 		
         	<div id="templatemo_header">
 				<div id="templatemo_logo_section">            
-		        	<h1><a href="index.html">Video Library</a></h1>            
+		        	<h1><a href="/">Video Library</a></h1>            
 					<h2>Store for all movies: Comedy, Thriller, Action, Romantic, Documentary</h2>
 				</div>
 				<div id="templatemo_user_section">            
-		        	Welcome User!!
+		        	Welcome <a href="/user/<%= userDet.userId%>?nocache=1"><%= userDet.firstname %></a>!!
+		        	<a href="/sign-out?nocache=1">Sign Out</a>
 				</div>
          	</div><!-- end of headder -->
             <div id="templatemo_menu_panel"> 
@@ -32,11 +33,11 @@
 					
 					<ul>
 						   
-					  <li><a href="userindex.html">Home    </a></li>
-					  <li><a href="viewusermovies.html">View Movies   </a></li>
-					  <li><a href="userhistory.html">View History   </a></li>
-					  <li><a href="paybills.html">Pay Bills   </a></li>	
-					  <li><a href="changepassword.html">Change Password   </a></li>	
+					  <li><a href="/userindex?nocache=1">Home    </a></li>
+					  <li><a href="/viewusermovies?nocache=1">View Movies   </a></li>
+					  <li><a href="/userhistory?nocache=1">View History   </a></li>
+					  <li><a href="/paybills?nocache=1">Pay Bills   </a></li>	
+					  <li><a href="/changepassword?nocache=1">Change Password   </a></li>	
 					</ul> 
 						
 				</div>
@@ -57,6 +58,7 @@
                     	<h1>View Movies: This Section lists all the movies and allows to filter and view Individual One</h1>
                     </div>
                     <div class="templatemo_post_mid">
+                    <form method="POST" action="/viewusermovies-submit">
 						<p>Filter movies based on criteria below</p>     
 						<table style="margin-left:150px"><tr><td>
 							<table border="0">
@@ -86,12 +88,20 @@
 							
 							<tr>
 							<td><label for="category">Category: </label> </td>
-							<td><input id="category" maxlength="75" name="category" type="text" /> </td>
+							<td><!--<input id="category" maxlength="75" name="category" type="text" />-->
+								<select id ="category" name="category">
+								<option value="">Select</option>
+								<% for(var i=0;i<categories.length;i++) { %>
+									<option value="<%=categories[i]%>"><%=categories[i]%></option>
+								<% } %>
+								</select>
+							 </td>
 							</tr>
 							
 							<tr>
 							<td><label for="rentamount">Rent Amount: </label> </td>
-							<td><input id="rentamount" maxlength="25" name="rentamount" type="text" style="width:80px"/> </td>
+							<td><input id="rentamountmin" placeholder="min" maxlength="25" name="rentamountmin" type="number" style="width:80px"/>
+							<input id="rentamountmax" placeholder="max" maxlength="25" name="rentamountmax" type="number" style="width:80px"/> </td>
 							</tr>
 							
 							<tr>
@@ -105,9 +115,38 @@
 						</tr></table>
                         
 						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
+						</form>
 						<br/>
 						<br/>
-							
+						<!-- List to display -->
+                    <table class="listData" border=1>
+                    <tr>
+                    <th style="color:white;">Sr. No.</th>
+                    <th style="color:white;">Movie Name</th>
+                    <th style="color:white;">Banner</th>
+                    <th style="color:white;">Release Year</th>
+                    <th style="color:white;">Rent Amount</th>
+                    <th style="color:white;">Available Copies</th>
+                    <th style="color:white;">Category</th>
+                    <th style="color:white;">View</th>
+                    </tr>
+                    <% if(movies != null && movies.length > 0) {
+              
+                    	for(var i=0;i<movies.length;i++) {
+                    	//console.log(movies[i].movie_id);
+                    %>
+	                    <tr>
+	                    <td><%= i+1 %></td>
+	                    <td><%= movies[i].movie_name %></td>
+	                    <td><%= movies[i].movie_banner %></td>
+	                    <td><%= movies[i].release_date %></td>
+	                    <td><%= movies[i].rent_amount %></td>
+	                    <td><%= movies[i].available_copies %></td>
+	                    <td width="30px"><%= movies[i].category %></td>
+	                    <td><a href="/usermovie/<%=movies[i].movie_id %>?nocache=1">View</a></td>
+	                    </tr>
+	                    <% } } %>
+                    </table>	
                     </div>
 					
                     <div class="templatemo_post_bottom">
