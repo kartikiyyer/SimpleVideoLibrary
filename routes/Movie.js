@@ -392,7 +392,7 @@ exports.issueMovieSubmit =function(req,res){
 			if(membershipNo != null) {
 				
 				userdb.selectUserByMembershipNo(function(results, error){
-					if(!error && results != null && results.length > 0) {
+					if(!error && results != null && results.length > 0 && results[0].user_id != 1) {
 						// Fetch categories from database
 						moviedb.selectCategories(function(results,error) {
 							var category = [];

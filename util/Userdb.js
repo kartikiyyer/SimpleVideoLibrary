@@ -30,7 +30,7 @@ exports.insertUser = insertUser;
 function editUser(callback, user) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("UPDATE users SET firstname = '" + user.firstname + "', lastname = '" + user.lastname + "', member_type = '" + user.memberType + "', email = '" + user.email+ "', address = '" + user.address+ "' , address2 = '" + user.address2+ "' , city = '" + user.city+ "' , state = '" + user.state+ "', zip = '" + user.zip+ "', zipext = '" + user.zipext+ "' WHERE user_id  = " + user.userId, function(error, results) {
+	//connection.query("UPDATE users SET firstname = '" + user.firstname + "', lastname = '" + user.lastname + "', member_type = '" + user.memberType + "', email = '" + user.email+ "', address = '" + user.address+ "' , address2 = '" + user.address2+ "' , city = '" + user.city+ "' , state = '" + user.state+ "', zip = '" + user.zip+ "', zipext = '" + user.zipext+ "', balance_amount = '" + user.balance_amount+ "', outstanding_movies = '" + user.outstanding_movies + "',issued_movies = '" + user.issued_movies +"' WHERE user_id  = " + user.userId, function(error, results) {
 	connection.query("UPDATE users SET firstname = ?, lastname = ?, member_type = ?, email = ?, address = ? , address2 = ?, city = ? , state = ? , zip = ? , zipext = ?, balance_amount = ?, outstanding_movies = ?, issued_movies = ? WHERE user_id  = ?" , [user.firstname,user.lastname, user.member_type, user.email, user.address, user.address2, user.city,user.state,user.zip, user.zipext, user.balance_amount, user.outstanding_movies, user.issued_movies, user.user_id],function(error, results) {	
 		if(!error) {
 			//console.log(results);
@@ -128,7 +128,7 @@ exports.selectUserById = selectUserById;
 function selectUserByIdPassword(callback, userId, password) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT user_id, membership_no, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address,address2, city, state, zip, zipext FROM users WHERE user_id  = " + userId, function(error, results) {
+	//connection.query("SELECT user_id FROM users WHERE user_id  = " + userId + " AND password = MD5('" + password + "')", function(error, results) {
 	connection.query("SELECT user_id FROM users WHERE user_id  = ? AND password = MD5(?)" , [userId,password], function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -149,7 +149,7 @@ exports.selectUserByIdPassword = selectUserByIdPassword;
 function editUserPassword(callback, userId, password) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("UPDATE users SET firstname = '" + user.firstname + "', lastname = '" + user.lastname + "', member_type = '" + user.memberType + "', email = '" + user.email+ "', address = '" + user.address+ "' , address2 = '" + user.address2+ "' , city = '" + user.city+ "' , state = '" + user.state+ "', zip = '" + user.zip+ "', zipext = '" + user.zipext+ "' WHERE user_id  = " + user.userId, function(error, results) {
+	//connection.query("UPDATE users SET password = MD5('" + password + "') WHERE user_id  = " + user.userId, function(error, results) {
 	connection.query("UPDATE users SET password = MD5(?) WHERE user_id  = ?" , [password, userId],function(error, results) {	
 		if(!error) {
 			//console.log(results);
@@ -171,7 +171,7 @@ exports.editUserPassword = editUserPassword;
 function selectIssuedMoviesByUser(callback, memberId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	//connection.query("SELECT DISTINCT(movie.movie_id) AS movie_id, movie_name, category FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE userid  = " + memberId , function(error, results) {
 	connection.query("SELECT DISTINCT(movie.movie_id) AS movie_id, movie_name, category FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE userid  = ?",[memberId], function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -192,7 +192,7 @@ exports.selectIssuedMoviesByUser = selectIssuedMoviesByUser;
 function selectCurrentlyIssuedMoviesByUser(callback, memberId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	//connection.query("SELECT COUNT(movie.movie_id) AS movie_count, user_movie_id, movie.movie_id AS movie_id, movie_name,rent_amount, category, issue_date FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE return_date IS NULL AND userid  = " + memberId + " GROUP BY movie.movie_id", function(error, results) {
 	connection.query("SELECT COUNT(movie.movie_id) AS movie_count, user_movie_id, movie.movie_id AS movie_id, movie_name,rent_amount, category, issue_date FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE return_date IS NULL AND userid  = ? GROUP BY movie.movie_id",[memberId], function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -237,7 +237,7 @@ function selectUserByMembershipNo(callback, membershipNo) {
 	console.log("membership no param: " + membershipNo);
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT * FROM users WHERE membership_no  = '" + membershipNo + "'" , function(error, results)
+	//connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext FROM users WHERE membership_no  = '" + membershipNo + "'" , function(error, results)
 	connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext FROM users WHERE membership_no  = ?" ,[ membershipNo ] , function(error, results)
 	{
 		if(!error) 
@@ -262,7 +262,7 @@ exports.selectUserByMembershipNo = selectUserByMembershipNo;
 function validateLogin(callback, membershipNo, password) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext FROM users WHERE membership_no  = '" + membershipNo + "' and password = MD5('" + password + "')", function(error, results) {
+	//connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext,role_name, users.role_id AS role_id FROM users INNER JOIN role_master ON role_master.role_id = users.role_id WHERE membership_no  = '" + membershipNo + "' and password = MD5('" + password + "')", function(error, results) {
 	connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext, role_name, users.role_id AS role_id FROM users INNER JOIN role_master ON role_master.role_id = users.role_id WHERE membership_no  = ? and password = MD5(?)", [membershipNo , password], function(error, results) {
 		if(!error) {
 			//console.log(results);

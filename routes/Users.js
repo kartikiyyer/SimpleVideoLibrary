@@ -468,18 +468,22 @@ exports.submitMovieList = function(req,res) {
 			if(membershipNo != null) {	
 				var member = null;
 				Userdb.selectUserByMembershipNo(function(results, error) {
-					if(!error && results != null && results.length > 0) {
+					if(!error && results != null && results.length > 0 && results[0].user_id != 1) {
 						member = results[0];
 						// Fetch movies from database
 						var movies = null;
-						Userdb.selectCurrentlyIssuedMoviesByUser(function(results,error) {
-							if(results != null && results[0].movie_count != 0) {
-								movies = results;
-							}
-	
-							//res.render('listmovie', { "user":user, "movies": movies});
-							res.render('submitmovielist', {"userDet" : user,"movies": movies,"membershipNo":membershipNo,"checkoutError":null});
-						},member.user_id);
+						if(member.outstanding_movies > 0) {
+							Userdb.selectCurrentlyIssuedMoviesByUser(function(results,error) {
+								if(results != null && results.length > 0) {
+									movies = results;
+								}
+		
+								//res.render('listmovie', { "user":user, "movies": movies});
+								res.render('submitmovielist', {"userDet" : user,"movies": movies,"membershipNo":membershipNo,"checkoutError":null});
+							},member.user_id);
+						} else {
+							res.render('submitmovielist', {"userDet" : user,"movies": movies,"membershipNo":membershipNo,"checkoutError":"This user has no outstanding movies."});
+						}
 					} else {
 						res.render('submitmovie',{"userDet" : user ,"fetchResult":"Member not recognized."});
 					}

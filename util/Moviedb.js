@@ -92,7 +92,7 @@ exports.selectMovieById = selectMovieById;
 function selectUsersIssuedMovie(callback, movieId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	//connection.query("SELECT DISTINCT(user_id), firstname, lastname FROM user_movie_mapping INNER JOIN users ON users.user_id = user_movie_mapping.userid WHERE movie_id  = '" + movieId + "'", function(error, results) {
 	connection.query("SELECT DISTINCT(user_id), firstname, lastname FROM user_movie_mapping INNER JOIN users ON users.user_id = user_movie_mapping.userid WHERE movie_id  = ?",[movieId], function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -114,7 +114,7 @@ function selectUsersCurrentlyIssuedMovie(callback, movieId) {
 	console.log(movieId);
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	//connection.query("SELECT DISTINCT(user_id), firstname, lastname FROM user_movie_mapping INNER JOIN users ON users.user_id = user_movie_mapping.userid WHERE return_date IS NULL AND movie_id  = '" + movieId + "'", function(error, results) {
 	connection.query("SELECT DISTINCT(user_id), firstname, lastname FROM user_movie_mapping INNER JOIN users ON users.user_id = user_movie_mapping.userid WHERE return_date IS NULL AND movie_id  = ?",[movieId], function(error, results) {
 		if(!error) {
 			//console.log(results);
@@ -276,7 +276,6 @@ function selectReleaseDate(callback) {
 		if(rows == null){
 			var connection = mysql.createdbConnection();
 			//var connection = mysql.getdbConnection();
-			// Limited to 5000 for development purpose.
 			connection.query(query, function(error, results) {
 				if(!error) {
 					//console.log(results);
