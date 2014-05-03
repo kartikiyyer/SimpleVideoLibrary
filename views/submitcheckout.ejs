@@ -59,8 +59,14 @@
                     </div>
                     <div class="templatemo_post_mid">
 						
-						<%= movie.movie_id %>
-						<%= member.user_id %>
+						<table class="listUserInfo" border=1 align="center">
+							<tr>
+								<th>Movie Returned By:</th>
+								<td><%= member.membership_no %></td>
+								<th>Returned Movie:</th>
+								<td><%= movie.movie_name %></td>
+							</tr>
+						</table>
                         
                         <div class="clear"></div>
                         

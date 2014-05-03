@@ -105,6 +105,7 @@
 							<td><!--<input id="state" maxlength="50" name="state" type="text" /> -->
 							
 							<select id="state" name="state">
+								<option value="">Select</option>
 							<% for(var i=0;i<states.length;i++) { %>
 								<option value="<%=states[i] %>"><%=states[i] %></option>
 								<% } %>
@@ -135,7 +136,6 @@
                     <th style="color:white;">Membership No.</th>
                     <th style="color:white;">First Name</th>
                     <th style="color:white;">Last Name</th>
-                    <th style="color:white;">Issued Movies</th>
                     <th style="color:white;">Outstanding Movies</th>
                     <th style="color:white;">Member Type</th>
                     <th style="color:white;">Balance Amount</th>
@@ -153,7 +153,6 @@
 	                    <td><%= members[i].membership_no %></td>
 	                    <td><%= members[i].firstname %></td>
 	                    <td><%= members[i].lastname %></td>
-	                    <td><%= members[i].issued_movies %></td>
 	                    <td><%= members[i].outstanding_movies %></td>
 	                    <td width="30px">
 	                    <% if(members[i].member_type == "S") { %>

@@ -55,12 +55,19 @@
                 <div class="templatemo_post">
                 
                 	<div class="templatemo_post_top">
-                    	<h1>Checkout all the Movies to be Issued</h1>
+                    	<h1>Checkout Summary</h1>
                     </div>
                     <div class="templatemo_post_mid">
+						<table class="listUserInfo" border=1 align="center">
+							<tr>
+								<th>Movie issued to:</th>
+								<td><%= member.membership_no %></td>
+								<th>Issued Movie:</th>
+								<td><%= movie.movie_name %></td>
+							</tr>
+						</table>
 						
-						<%= movie.movie_id %>
-						<%= member.user_id %>
+						
                         
                         <div class="clear"></div>
                         
