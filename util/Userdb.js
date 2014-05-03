@@ -237,8 +237,8 @@ function selectUserByMembershipNo(callback, membershipNo) {
 	console.log("membership no param: " + membershipNo);
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
-	//connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext FROM users WHERE membership_no  = '" + membershipNo + "'" , function(error, results)
-	connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, city, state, zip, zipext FROM users WHERE membership_no  = ?" ,[ membershipNo ] , function(error, results)
+	//connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address,address2, city, state, zip, zipext FROM users WHERE membership_no  = '" + membershipNo + "'" , function(error, results)
+	connection.query("SELECT user_id, membership_no, password, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address, address2, city, state, zip, zipext FROM users WHERE membership_no  = ?" ,[ membershipNo ] , function(error, results)
 	{
 		if(!error) 
 		{
