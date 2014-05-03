@@ -9,8 +9,48 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
 
+<script type="text/javascript">
+
+   function allnumeric(inputtxt)  
+   {  
+	 
+	 var numbers = /^[0-9]+$/;  
+	 if(inputtxt.match(numbers))  
+	 {  
+	  return true;  
+	 }  
+	 else  
+	 {
+	  return false;  
+	 }  
+   }
+   
+
+	function validateGenerateBill()   
+   {
+     if(document.generateBill.membershipNo.value ==null ||document.generateBill.membershipNo.value == ''){
+			alert('Membership No. cannot be blank');
+			return false;
+		} 
+	else if(!allnumeric(document.generateBill.membershipNo.value))
+	{
+		alert("Membership No. should be numeric");
+		return false;
+	}
+	else if(document.generateBill.membershipNo.value.length != 9 ) 
+	{
+		alert("Membership No. should be 9 Digits.");
+		return false;
+	}
+	else
+	{
+		
+		return true;
+	}
+    }
+</script>
 </head>
 
 <body>
@@ -59,7 +99,150 @@
                     </div>
                     <div class="templatemo_post_mid">
 						
-						<p>Page under construction</p>
+						<div>
+						<form name="generateBill" action="/generatebill-submit" method="POST" onsubmit="return validateGenerateBill()">
+							<div style="color:yellow; font-weight:bold;" align="center">
+				<% if(fetchResult != null) {%>
+				<%= fetchResult %>
+				<% } %>
+				</div>
+				<br/>
+							<table><tbody>                        
+								<tr>
+									<td><label for="membershipNo">Membership Number: </label> </td>
+									<td><input id="membershipNo" maxlength="75" name="membershipNo" type="text"/></td>
+								</tr>
+							</tbody></table>
+							<br/>
+							<div><input name="Submit" type="submit" value="Submit" style="width:70px; align:right; margin-left:100px"/></div>
+							</form>
+						</div>
+						<%
+							if(member !=null ){
+								%>
+						<div align="center">
+						
+						<h4 style="color:yellow;">User Info</h4>
+							
+								<table class="listUserInfo" border=1 align = "center">
+									<tr>
+										<th>Membership No:</th>
+										<td><%= member.membership_no %>    </td>		
+
+									</tr>
+									<tr>
+										<th>First Name:</th>
+										<td><%= member.firstname %>    </td>		
+									</tr>
+									<tr>
+										<th>Last Name:</th>
+										<td><%= member.lastname %>    </td>		
+									</tr>
+									
+								</table>
+								
+						
+						<h4 style="color:yellow;">Rented Movies</h4>
+						<%if(member.member_type == "S") { %>
+						<% 
+						if(movies !=null && movies.length > 0){
+							%>
+							<table class="listUserInfo" border=1 align = "center">
+								<tr>
+									<th>Movie Name:</th>
+									<th>Category:</th>
+									<th>Issue Date:</th>
+									<th>Rent Amount:</th>
+									<th>Copies:</th>
+									<th>Total:</th>
+								</tr>
+								<% for(var i=0;i< movies.length;i++) {%>
+								<tr>
+								
+									<td><%= movies[i].movie_name %></td>
+									<td><%= movies[i].category %></td>
+									<td><%= movies[i].issue_date %></td>
+									<td><%= movies[i].rent_amount %></td>
+										
+									<td><%= movies[i].movie_count %></td>
+									
+									<td><% 
+									
+									var total = 0;
+									total = movies[i].movie_count * movies[i].rent_amount;									
+									 %>
+									 <%= total %></td>						
+															
+								</tr>
+								<% } %>
+								<tr>
+								<td colspan="5" style="color:yellow;text-align:right;font-weight:bold" >
+								Grand Total:
+								</td>
+								<td style="color:yellow;font-weight:bold"><%=member.balance_amount %></td>
+								</tr>
+								
+							</table>
+							<%
+						}
+					else{
+						%>
+						<h5 style="color:yellow;">No movies rented.</h5>
+						<%
+					} } else {
+					%>
+					<% 
+						if(movies !=null && movies.length > 0){
+							%>
+							<table class="listUserInfo" border=1 align = "center">
+								<tr>
+									<th>Movie Name:</th>
+									<th>Category:</th>
+									<th>Issue Date:</th>
+									<th>Rent Amount:</th>
+									<th>Copies:</th>
+								</tr>
+								<% for(var i=0;i< movies.length;i++) {%>
+								<tr>
+								
+									<td><%= movies[i].movie_name %></td>
+									<td><%= movies[i].category %></td>
+									<td><%= movies[i].issue_date %></td>
+									<td><%= movies[i].rent_amount %></td>										
+									<td><%= movies[i].movie_count %></td>						
+															
+								</tr>
+								<% } %>	
+							</table>
+							<%
+						}
+					else{
+						%>
+						<h5 style="color:yellow;">No movies rented.</h5>
+						<%
+					} %>
+				<br/>
+				
+				<h4 style="color:yellow;">Subscription Details</h4>
+				
+						<table class="listUserInfo" border=1 align = "center" style="font-weight:bolder">
+								<tr>
+									<th>Description:</th>
+									<th>Amount:</th>
+									
+								</tr>
+								<tr>								
+									<td>Monthly Subscription</td>
+									<td><%= member.balance_amount %></td>
+								</tr>
+						</table>
+					<% } %>
+						</div>
+						<%
+							}
+						
+						%>
+						
                         
                         <div class="clear"></div>
                         

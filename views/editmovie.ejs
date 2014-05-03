@@ -31,7 +31,8 @@
    {  
 	 
 	 var numbers = /^[0-9]+\.[0-9]+$/;
-	 if(inputtxt.match(numbers))  
+	 var numbers1 = /^[0-9]+$/;
+	 if(inputtxt.match(numbers) || inputtxt.match(numbers1)) 
 	 {  
 	  return true;  
 	 }  
@@ -133,7 +134,12 @@
                       <h3 id="error" style="color:yellow;"></h3>
                   
                     	<form method="POST" id="createmovie" action="/editmovie-submit" onsubmit="return validateCreateMovie(this)">
-                    	<% console.log(movie); %>
+                    	<div style="color:yellow; font-weight:bold;" align="center">
+				<% if(editedresults != null) {%>
+				<%= editedresults %>
+				<% } %>
+				</div>
+				<br/>
                     	<table border="0">
 							<tbody>
 							
@@ -188,14 +194,7 @@
 							</tbody></table>
                 			<input type="hidden" name="movieId" value="<%=movie.movie_id%>"/>
                            </form>
-                           <%
-                            if(editedresults!=null)
-                            	{
-                           %>
-                           <h1 style="color:yellow;">Movie Successfully Edited</h1>
-                           <%
-                       			}
-                           %>   
+                          
                            
                                            
                     </div>

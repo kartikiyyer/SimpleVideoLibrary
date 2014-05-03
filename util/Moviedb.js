@@ -30,11 +30,11 @@ function editMovie(callback, movieDetails) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	//connection.query("UPDATE movie SET movie_name = '" + movieDetails.movieName + "', movie_banner = '" + movieDetails.movieBanner + "', release_date = '" + movieDetails.releaseDate + "', rent_amount = '" + movieDetails.rentAmount + "', available_copies = '" + movieDetails.availableCopies + "', category = '" + movieDetails.category + "' WHERE movie_id  = '" + movieDetails.movieId + "'", function(error, results) {
-	connection.query("UPDATE movie SET movie_name = ?, movie_banner = ?, release_date = ?, rent_amount = ?, available_copies = ?, category = ? WHERE movie_id  = ?", [movieDetails.movieName, movieDetails.movieBanner, movieDetails.releaseDate, movieDetails.rentAmount, movieDetails.availableCopies, movieDetails.category, movieDetails.movieId],function(error, results) {
+	connection.query("UPDATE movie SET movie_name = ?, movie_banner = ?, release_date = ?, rent_amount = ?, available_copies = ?, category = ? WHERE movie_id  = ?", [movieDetails.movie_name, movieDetails.movie_banner, movieDetails.release_date, movieDetails.rent_amount, movieDetails.available_copies, movieDetails.category, movieDetails.movie_id],function(error, results) {
 		if(!error) {
 			//console.log(results);
 			if(results.length !== 0) {
-				console.log("Movie details edited for " + movieDetails.movieId);
+				console.log("Movie details edited for " + movieDetails.movie_id);
 			}
 		} else {
 			console.log(error);
@@ -109,6 +109,29 @@ function selectUsersIssuedMovie(callback, movieId) {
 }
 
 exports.selectUsersIssuedMovie = selectUsersIssuedMovie;
+
+function selectUsersCurrentlyIssuedMovie(callback, movieId) {
+	console.log(movieId);
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	connection.query("SELECT DISTINCT(user_id), firstname, lastname FROM user_movie_mapping INNER JOIN users ON users.user_id = user_movie_mapping.userid WHERE return_date IS NULL AND movie_id  = ?",[movieId], function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User details selected for " + movieId);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.selectUsersCurrentlyIssuedMovie = selectUsersCurrentlyIssuedMovie;
+
 
 
 

@@ -32,7 +32,8 @@
    {  
 	 
 	 var numbers = /^[0-9]+\.[0-9]+$/;
-	 if(inputtxt.match(numbers))  
+	 var numbers1 = /^[0-9]+$/;
+	 if(inputtxt.match(numbers) || inputtxt.match(numbers1))  
 	 {  
 	  return true;  
 	 }  
@@ -134,7 +135,14 @@
                     <h3 id="error" style="color:yellow;"></h3>
                     
                     	<form method="POST" id="createmovie" action="/createmovie-submit" onsubmit="return validateCreateMovie(this)">
-                    	<table border="0">
+                    	
+                    	<div style="color:yellow; font-weight:bold;" align="center">
+				<% if(insertedresults != null) {%>
+				<%= insertedresults %>
+				<% } %>
+				</div>
+				<br/>
+				<table border="0">
 							<tbody>
 							
 							<tr>
@@ -184,14 +192,7 @@
 
 							</tbody></table>
                            </form>
-                           <%
-                            if(insertedresults!=null)
-                            	{
-                           %>
-                           <h1 style="color:yellow;"><%= insertedresults %></h1>
-                           <%
-                       			}
-                           %>                   
+                                          
                     </div>
                     <div class="templatemo_post_bottom">
                     

@@ -31,11 +31,11 @@ function editUser(callback, user) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	//connection.query("UPDATE users SET firstname = '" + user.firstname + "', lastname = '" + user.lastname + "', member_type = '" + user.memberType + "', email = '" + user.email+ "', address = '" + user.address+ "' , address2 = '" + user.address2+ "' , city = '" + user.city+ "' , state = '" + user.state+ "', zip = '" + user.zip+ "', zipext = '" + user.zipext+ "' WHERE user_id  = " + user.userId, function(error, results) {
-	connection.query("UPDATE users SET firstname = ?, lastname = ?, member_type = ?, email = ?, address = ? , address2 = ?, city = ? , state = ? , zip = ? , zipext = ? WHERE user_id  = ?" , [user.firstname,user.lastname, user.memberType, user.email, user.address, user.address2, user.city,user.state,user.zip, user.zipext, user.userId],function(error, results) {	
+	connection.query("UPDATE users SET firstname = ?, lastname = ?, member_type = ?, email = ?, address = ? , address2 = ?, city = ? , state = ? , zip = ? , zipext = ?, balance_amount = ?, outstanding_movies = ?, issued_movies = ? WHERE user_id  = ?" , [user.firstname,user.lastname, user.member_type, user.email, user.address, user.address2, user.city,user.state,user.zip, user.zipext, user.balance_amount, user.outstanding_movies, user.issued_movies, user.user_id],function(error, results) {	
 		if(!error) {
 			//console.log(results);
 			if(results.length !== 0) {
-				console.log("User details edited for " + user.userId);
+				console.log("User details edited for " + user.user_id);
 			}
 		} else {
 			console.log(error);
@@ -125,12 +125,54 @@ function selectUserById(callback, userId) {
 
 exports.selectUserById = selectUserById;
 
+function selectUserByIdPassword(callback, userId, password) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	//connection.query("SELECT user_id, membership_no, firstname, lastname,issued_movies, outstanding_movies, member_type, balance_amount, email, address,address2, city, state, zip, zipext FROM users WHERE user_id  = " + userId, function(error, results) {
+	connection.query("SELECT user_id FROM users WHERE user_id  = ? AND password = MD5(?)" , [userId,password], function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User details selected for " + userId);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.selectUserByIdPassword = selectUserByIdPassword;
+
+function editUserPassword(callback, userId, password) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	//connection.query("UPDATE users SET firstname = '" + user.firstname + "', lastname = '" + user.lastname + "', member_type = '" + user.memberType + "', email = '" + user.email+ "', address = '" + user.address+ "' , address2 = '" + user.address2+ "' , city = '" + user.city+ "' , state = '" + user.state+ "', zip = '" + user.zip+ "', zipext = '" + user.zipext+ "' WHERE user_id  = " + user.userId, function(error, results) {
+	connection.query("UPDATE users SET password = MD5(?) WHERE user_id  = ?" , [password, userId],function(error, results) {	
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("User details edited for " + userId);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results,error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.editUserPassword = editUserPassword;
+
 
 function selectIssuedMoviesByUser(callback, memberId) {
 	var connection = mysql.createdbConnection();
 	//var connection = mysql.getdbConnection();
 	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
-	connection.query("SELECT DISTINCT(movie_id), movie_name, category FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE userid  = ?",[memberId], function(error, results) {
+	connection.query("SELECT DISTINCT(movie.movie_id) AS movie_id, movie_name, category FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE userid  = ?",[memberId], function(error, results) {
 		if(!error) {
 			//console.log(results);
 			if(results.length !== 0) {
@@ -147,6 +189,26 @@ function selectIssuedMoviesByUser(callback, memberId) {
 
 exports.selectIssuedMoviesByUser = selectIssuedMoviesByUser;
 
+function selectCurrentlyIssuedMoviesByUser(callback, memberId) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	//connection.query("SELECT movie_id, movie_name, movie_banner, release_date, rent_amount, available_copies, category FROM movie WHERE movie_id  = '" + movieId + "'", function(error, results) {
+	connection.query("SELECT COUNT(movie.movie_id) AS movie_count, user_movie_id, movie.movie_id AS movie_id, movie_name,rent_amount, category, issue_date FROM user_movie_mapping INNER JOIN movie ON movie.movie_id = user_movie_mapping.movie_id WHERE return_date IS NULL AND userid  = ? GROUP BY movie.movie_id",[memberId], function(error, results) {
+		if(!error) {
+			//console.log(results);
+			if(results.length !== 0) {
+				console.log("Movie details selected for " + memberId);
+			}
+		} else {
+			console.log(error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);
+}
+
+exports.selectCurrentlyIssuedMoviesByUser = selectCurrentlyIssuedMoviesByUser;
 
 
 function selectUserByEmail(callback, email) {
@@ -383,3 +445,43 @@ function selectUserBySearchCriteria(callback, membershipNo, firstname, lastname,
 }
 
 exports.selectUserBySearchCriteria = selectUserBySearchCriteria;
+
+function insertUserMovieMapping(callback, userId, movieId) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	var query = "insert into user_movie_mapping (USERID,MOVIE_ID,ISSUE_DATE) values(?,?,now())";
+	connection.query(query, [userId,movieId], function(error, results) {
+		if(!error) {
+			if(results.length !== 0) {
+				console.log("Userm movie mapping inserted.");
+			}
+		} else {
+			console.log("Insert User : " + error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);		
+}
+exports.insertUserMovieMapping = insertUserMovieMapping;
+
+
+function updateUserMovieMapping(callback, userMovieId) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	var query = "UPDATE user_movie_mapping SET return_date = now() WHERE user_movie_id = ?";
+	connection.query(query, [userMovieId], function(error, results) {
+		if(!error) {
+			if(results.length !== 0) {
+				console.log("User movie mapping updated.");
+			}
+		} else {
+			console.log("Update user movie mapping : " + error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);		
+}
+exports.updateUserMovieMapping = updateUserMovieMapping;
+

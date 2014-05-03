@@ -33,7 +33,7 @@
 
 					<ul>
 
-						<li><a href="/userindex?nocache=1">Home    </a></li>
+						<li><a href="/">Home    </a></li>
 						<li><a href="/viewusermovies?nocache=1">View Movies   </a></li>
 						<li><a href="/userhistory?nocache=1">View History   </a></li>
 						<li><a href="/paybills?nocache=1">Pay Bills   </a></li>	
@@ -123,11 +123,14 @@
 									<th>Category:</th>
 									<th>Issue Date:</th>
 								</tr>
+								<% for(var i=0;i< movies.length;i++) {%>
 								<tr>
-									<td><%= member.firstname %></td>
-									<td><%= member.membership_no %></td>
-									<td><%= member.lastname %></td>			
+								
+									<td><%= movies[i].movie_name %></td>
+									<td><%= movies[i].category %></td>
+									<td><%= movies[i].issue_date %></td>			
 								</tr>
+								<% } %>
 							</table>
 							<%
 						}

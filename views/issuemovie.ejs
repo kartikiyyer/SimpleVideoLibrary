@@ -10,8 +10,47 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
 
+   function allnumeric(inputtxt)  
+   {  
+	 
+	 var numbers = /^[0-9]+$/;  
+	 if(inputtxt.match(numbers))  
+	 {  
+	  return true;  
+	 }  
+	 else  
+	 {
+	  return false;  
+	 }  
+   }
+   
+
+	function validateIssueMovie()   
+   {
+     if(document.issuemovie.membershipNo.value ==null ||document.issuemovie.membershipNo.value == ''){
+			alert('Membership No. cannot be blank');
+			return false;
+		} 
+	else if(!allnumeric(document.issuemovie.membershipNo.value))
+	{
+		alert("Membership No. should be numeric");
+		return false;
+	}
+	else if(document.issuemovie.membershipNo.value.length != 9 ) 
+	{
+		alert("Membership No. should be 9 Digits.");
+		return false;
+	}
+	else
+	{
+		
+		return true;
+	}
+    }
+</script>
 </head>
 
 <body>
@@ -60,6 +99,15 @@
                     	<h1>Issue Movie: On basis of Movie Id/Movie Name and the Membership Number, movies are Issued</h1>
                     </div>
                     <div class="templatemo_post_mid">
+                    <div align="center">
+                    <form action="/issuemovie-submit" id ='IMSubmit' method="Post" name ="issuemovie" onsubmit="return validateIssueMovie()"> 
+                    <div style="color:yellow; font-weight:bold;" align="center">
+				<% if(fetchResult != null) {%>
+				<%= fetchResult %>
+				<% } %>
+				</div>
+				<br/>
+                    
                     	<table><tbody>                        
 							<tr>
 								<td><label for="membershipNo">Membership Number: </label> </td>
@@ -67,43 +115,11 @@
 							</tr>
 						</tbody></table>
 						<br/>
-						<div><input name="Submit" type="submit" value="Submit" style="width:70px; align:right; margin-left:100px"/></div>
+						<div><input name="Submit" type="submit" value="Next >>" style="width:70px; align:right; margin-left:100px"/></div>
+						 </form>
+						 </div>
 						</div>
-                        <div class="clear"></div>
-                        <br/>
-                        <table style="margin-left:150px"><tr><td>
-							<table border="0">
-							<tbody>
-							
-							<tr>
-							<td><label for="mname">Movie Name: </label> </td>
-							<td><input id="mname" maxlength="100" name="mname" type="text" /> </td>
-							</tr>
-							
-							</tbody></table>
-						</td>
-						<td>
-							<table border="0">
-							<tbody>
-							
-							<tr>
-							<td><label for="category">Category: </label> </td>
-							<td><!--<input id="category" maxlength="75" name="category" type="text" />--> 
-							<select id ="category" name="category">
-							<option value="">Select</option>
-							<% for(var i=0;i<categories.length;i++) { %>
-								<option value="<%=categories[i]%>"><%=categories[i]%></option>
-							<% } %>
-							</select>
-							</td>
-							</tr>
-							
-							</tbody></table>
-						</tr></table>
-                        <table>
-						</table> 
-						<div><input name="Filter" type="submit" value="Filter" style="width:50px; align:right; margin-left:800px"/></div>
-                        
+                        <div class="clear"></div>                        
                     </div>
                     <div class="templatemo_post_bottom">
                     

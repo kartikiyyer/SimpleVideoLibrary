@@ -49,6 +49,13 @@
 
 			<fieldset>
 
+				<div style="color:red; font-weight:bold;" align="center">
+				<% if(error != null) {%>
+				<%= error %>
+				<% } %>
+				</div>
+				<br/>
+				
 				<p><label for="memNo">Membership number</label></p>
 				<p><input type="memNo" name = "membershipNo" id="membershipNo" onBlur="fixmemberId(this);"></p>
 

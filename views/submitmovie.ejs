@@ -10,8 +10,48 @@
 </style>
 <title>Video Library</title>
 
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
 
+<script type="text/javascript">
+
+   function allnumeric(inputtxt)  
+   {  
+	 
+	 var numbers = /^[0-9]+$/;  
+	 if(inputtxt.match(numbers))  
+	 {  
+	  return true;  
+	 }  
+	 else  
+	 {
+	  return false;  
+	 }  
+   }
+   
+
+	function validateReturnMovie()   
+   {
+     if(document.returnmovie.membershipNo.value ==null ||document.returnmovie.membershipNo.value == ''){
+			alert('Membership No. cannot be blank');
+			return false;
+		} 
+	else if(!allnumeric(document.returnmovie.membershipNo.value))
+	{
+		alert("Membership No. should be numeric");
+		return false;
+	}
+	else if(document.returnmovie.membershipNo.value.length != 9 ) 
+	{
+		alert("Membership No. should be 9 Digits.");
+		return false;
+	}
+	else
+	{
+		
+		return true;
+	}
+    }
+</script>
 </head>
 
 <body>
@@ -60,18 +100,29 @@
                     	<h1>Submit Movie: On basis of Movie Name and the Membership Number, movies are Submitted</h1>
                     </div>
                     <div class="templatemo_post_mid">
+                    <div align="center">
+                    <form action="/submitmovie-submit" method="POST" name="returnmovie" onsubmit="return validateReturnMovie()">
+                    	
+                    	<div style="color:red; font-weight:bold;">
+				<% if(fetchResult != null) {%>
+				<%= fetchResult %>
+				<% } %>
+				</div>
+				<br/>
                     	<table><tbody>                        
 							<tr>
 								<td><label for="membershipNo">Membership Number: </label> </td>
 								<td><input id="membershipNo" maxlength="40" name="membershipNo" type="text"/></td>
 							</tr>
-							<tr>
+							<!--<tr>
 								<td><label for="movieName">Movie Name: </label> </td>
 								<td><input id="movieName" maxlength="75" name="movieName" type="text"/></td>
-							</tr>
+							</tr>-->
 						</tbody></table>
 						<br/>
-						<div><input name="Submit" type="submit" value="Submit" style="width:70px; align:right; margin-left:100px"/></div>
+						<div><input name="Submit" type="submit" value="Next >>" style="width:70px; align:right; margin-left:100px"/></div>
+						</form>
+						</div>
 						</div>
                         <div class="clear"></div>
                         

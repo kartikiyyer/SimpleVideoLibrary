@@ -7,7 +7,7 @@ function createdbConnection() {
 	var connection = mysql.createConnection({
 		host     : 'localhost',
 		user     : 'root',
-		password : 'password',
+		password : 'mysql',
 		port: '3306',
 		database: 'videolibrary'
 	});

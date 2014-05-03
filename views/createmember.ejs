@@ -144,6 +144,12 @@ $(".memberType").show();
                     </div>
                     <div class="templatemo_post_mid">
                     <form name="createmember" onsubmit="return validateCreateMember()" action="/createmember-submit" method="post">
+                    	<div style="color:yellow; font-weight:bold;" align="center">
+				<% if(insertedresults != null) {%>
+				<%= insertedresults %>
+				<% } %>
+				</div>
+				<br/>
                     	<table border="0">
 							<tbody>
 
@@ -187,7 +193,14 @@ $(".memberType").show();
 							</tr>
 							<tr>
 							<td><label for="state">State*: </label> </td>
-							<td><input id="state" maxlength="50" name="state" type="text" /> </td>
+							<td><!--<input id="state" maxlength="50" name="state" type="text" />-->
+							<select id="state" name="state">
+							<% for(var i=0;i<states.length;i++) { %>
+								<option value="<%=states[i] %>"><%=states[i] %></option>
+							<% } %>
+							</select>
+							
+							 </td>
 							</tr>
 							<tr>
 							<td><label for="zip1">Zip Code*: </label> </td>
@@ -215,14 +228,7 @@ $(".memberType").show();
 
 							</tbody></table>
                             </form>
-                            <%
-                            if(insertedresults!=null)
-                            	{
-                           %>
-                           <h1 style="color:yellow;"><%=insertedresults%></h1>
-                           <%
-                       			}
-                           %>    
+                           
                     </div>
                     <div class="templatemo_post_bottom">
                     
