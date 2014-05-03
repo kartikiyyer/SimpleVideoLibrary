@@ -530,6 +530,9 @@ exports.submitMovieSelectSubmit = function(req,res) {
 											Moviedb.editMovie(function(results, error) { 
 												// Decrease outstanding movies on his name.
 												member.outstanding_movies -= 1;	
+												if(member.member_type == "S") {
+													member.balance_amount -= movie.rent_amount;
+												}
 												Userdb.editUser(function(results, error) {
 													console.log("Movie/s returned by user");
 													res.render('submitCheckout',{"userDet" : user,"movie":movie,"member":member });
