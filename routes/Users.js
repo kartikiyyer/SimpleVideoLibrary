@@ -166,8 +166,13 @@ exports.validateLogin = function(req, res){
 
 		Userdb.validateLogin(function(err,results){
 			if(err){
-				console.log(err);
-				res.render('login');
+				/*console.log(err);
+				res.render('login');*/
+				req.session.error = "Invalid credentials.";
+				res.writeHead(301,
+						{Location: "/login"}			
+				);
+				res.end();
 			}else if(results.length > 0) {
 				//console.log("query result fetched");
 				req.session.userdetails = JSON.stringify({userId : results[0].user_id, membershipNo : results[0].membership_no, firstname :  results[0].firstname, lastname : results[0].lastname, issuedMovies : results[0].issued_movies, outstandingMovies : results[0].outstanding_movies, memberTypes : results[0].member_types, balanceAmount : results[0].balance_amount, roleId : results[0].role_id,  roleName : results[0].role_name});
@@ -411,7 +416,7 @@ exports.generateBillSubmit = function(req,res) {
 						Userdb.selectCurrentlyIssuedMoviesByUser(function(results, error){
 							var movies = null;
 							console.log(results);
-							if(results != null && results[0].movie_count != 0) {
+							if(results != null && results.length > 0 && results[0].movie_count != 0) {
 								movies = results;
 							}
 							console.log(movies);
@@ -477,7 +482,8 @@ exports.submitMovieList = function(req,res) {
 								if(results != null && results.length > 0) {
 									movies = results;
 								}
-		
+								console.log("Movies issued:");
+								console.log(movies);
 								//res.render('listmovie', { "user":user, "movies": movies});
 								res.render('submitmovielist', {"userDet" : user,"movies": movies,"membershipNo":membershipNo,"checkoutError":null});
 							},member.user_id);
@@ -508,7 +514,9 @@ exports.submitMovieSelectSubmit = function(req,res) {
 		var user = JSON.parse(req.session.userdetails);
 		if(user !=null && user.roleName == "ADMIN") {
 			var membershipNo = req.body.membershipNo;
-			var userMovieId = req.body.userMovieId;
+			//console.log("taking from reuest object: " + req.body.moviemappingId);
+			//var userMovieId = req.body.moviemappingId;
+			//console.log("user movie id"+userMovieId);
 			var movieId = req.body.movieId;
 			if(membershipNo != null && membershipNo != null) {
 				  Userdb.selectUserByMembershipNo(function(results,err){
@@ -516,37 +524,40 @@ exports.submitMovieSelectSubmit = function(req,res) {
 						
 						var member = null;
 						if(results != null && results.length > 0) {
-							member = results[0];		
-							
-							Userdb.updateUserMovieMapping(function(results, error) {
-							  	if(!error) {
-								console.log(results);
-									if(results.length !== 0) {
-										var movie = null;
-										Moviedb.selectMovieById(function(results, error){
-											movie = results[0];
-											// Increment available copies.
-											movie.available_copies += 1; 
-											Moviedb.editMovie(function(results, error) { 
-												// Decrease outstanding movies on his name.
-												member.outstanding_movies -= 1;	
-												if(member.member_type == "S") {
-													member.balance_amount -= movie.rent_amount;
-												}
-												Userdb.editUser(function(results, error) {
-													console.log("Movie/s returned by user");
-													res.render('submitCheckout',{"userDet" : user,"movie":movie,"member":member });
-												},member);
-											},movie);
-										},movieId);
-									}
-								} else {
-									console.log(error);
+							member = results[0];
+							var userMovieMapping = null;
+							Userdb.selectUserMovieMapping(function(results, error) {
+								if(results != null && results.length > 0 ){
+									userMovieMapping = results[0];
+									Userdb.updateUserMovieMapping(function(results, error) {
+									  	if(!error) {
+										console.log(results);
+											if(results.length !== 0) {
+												var movie = null;
+												Moviedb.selectMovieById(function(results, error){
+													movie = results[0];
+													// Increment available copies.
+													movie.available_copies += 1; 
+													Moviedb.editMovie(function(results, error) { 
+														// Decrease outstanding movies on his name.
+														member.outstanding_movies -= 1;	
+														if(member.member_type == "S") {
+															member.balance_amount -= movie.rent_amount;
+														}
+														Userdb.editUser(function(results, error) {
+															console.log("Movie returned by user");
+															res.render('submitCheckout',{"userDet" : user,"movie":movie,"member":member });
+														},member);
+													},movie);
+												},movieId);
+											}
+										} else {
+											console.log(error);
+										}
+									  	
+									}, userMovieMapping.user_movie_id);
 								}
-							}, userMovieId);
-									
-									
-								
+							}, member.user_id, movieId);								
 						}	
 					},membershipNo);
 			}			

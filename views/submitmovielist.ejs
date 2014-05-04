@@ -94,11 +94,11 @@
 	                    <td><%= movies[i].issue_date %></td>
 	                    
 	                    <td><%= movies[i].movie_count %></td>
-	       
+	       				
 	                    <td>
 	                     <form action="/submitmovieselect-submit" method="POST">
 	                          <input type="hidden" name="membershipNo" value="<%=membershipNo%>"/>
-	                          <input type="hidden" name="userMovieId" value="<%=movies[i].user_movie_id%>"/>
+	                          <!--<input type="hidden" name="moviemappingId" value="<%=movies[i].user_movie_id%>"/>-->
 	                          <input type="hidden" name="movieId" value="<%=movies[i].movie_id%>"/>
                    			  <input type="submit" value="Submit >>"/> 
                    		</form>       

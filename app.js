@@ -11,6 +11,8 @@ var path = require('path');
 var users = require("./routes/Users");
 var movie = require("./routes/Movie");
 var app = express();
+var mysql = require("./util/MySQLConnection");
+mysql.createdbConnectionPool();
 
 // all environments
 app.set('port', process.env.PORT || 3000);

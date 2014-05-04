@@ -337,11 +337,11 @@ exports.editMovieSubmit = function(req,res) {
 						// Fetch movies from database
 						moviedb.selectMovieById(function(results,error) {
 							res.render("editmovie",{"userDet" : user,"editedresults":"Movie edited successfully","categories":categories, "movie":results[0]});
-						},movieDetails.movieId);
+						},movieDetails.movie_id);
 					} else {
 						moviedb.selectMovieById(function(results,error) {
 							res.render("editmovie",{"userDet" : user,"editedresults":"Movie not edited","categories":categories, "movie":results[0]});
-						},movieDetails.movieId);
+						},movieDetails.movie_id);
 					}
 				},movieDetails);
 			});
@@ -588,7 +588,7 @@ exports.issueMovieSelectSubmit =function(req,res){
 											}
 										}, member.user_id, movieId);
 									} else {
-										var movies = null;
+										
 										var categories = [];
 										var releaseDates = [];
 										// TODO: Fetch information of user
@@ -616,16 +616,10 @@ exports.issueMovieSelectSubmit =function(req,res){
 													}*/
 													releaseDates = results;
 								
-													// Fetch movies from database
-													moviedb.selectMovies(function(results,error) {
-														/*for(var i=0 ;i<results.length;i++) {
-															movies[i] = results[i];
-														}*/
-														movies = results;
 								
 														//res.render('listmovie', { "user":user, "movies": movies});
-														res.render('issuemovielist', {"userDet" : user,"movies": movies, "categories":categories, "releaseDates": releaseDates,"membershipNo":membershipNo,"checkoutError":"User has exceeded the issued movies."});
-													});
+														res.render('issuemovielist', {"userDet" : user,"movies": null, "categories":categories, "releaseDates": releaseDates,"membershipNo":membershipNo,"checkoutError":"User has exceeded the issued movies."});
+													
 												});
 											});		
 										}

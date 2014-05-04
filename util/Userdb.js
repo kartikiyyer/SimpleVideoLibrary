@@ -485,3 +485,21 @@ function updateUserMovieMapping(callback, userMovieId) {
 }
 exports.updateUserMovieMapping = updateUserMovieMapping;
 
+function selectUserMovieMapping(callback, userId, movieId) {
+	var connection = mysql.createdbConnection();
+	//var connection = mysql.getdbConnection();
+	var query = "SELECT userId, movie_id, user_movie_id FROM user_movie_mapping WHERE userId = ? AND movie_id = ? AND return_date IS NULL";
+	connection.query(query, [userId,movieId], function(error, results) {
+		if(!error) {
+			if(results.length !== 0) {
+				console.log("Userm movie mapping selected.");
+			}
+		} else {
+			console.log("Selected User movie mapping: " + error);
+		}
+		callback(results, error);
+	});
+	mysql.closedbConnection(connection);
+	//mysql.releasedbConnection(connection);		
+}
+exports.selectUserMovieMapping = selectUserMovieMapping;
