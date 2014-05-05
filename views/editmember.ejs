@@ -34,6 +34,7 @@
 
 	function validateCreateMember()   
    {
+   
 	
      if(document.createmember.fname.value==null ||document.createmember.fname.value == ''){
 			alert('Member First Name cannot be blank');
@@ -62,13 +63,13 @@
 		if(document.createmember.zip1.value==null ||document.createmember.zip1.value == ''){
 			alert('Please enter Zip Code');
 			return false;
-		}else if(!allnumeric(document.createmember.zip1.value) && document.createmember.zip1.value.length != 5){
+		}else if(!allnumeric(document.createmember.zip1.value) || document.createmember.zip1.value.length != 5){
 			alert('Enter valid Zip Code for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
 			return false;
 		}
 		
-		if(document.createmember.zip2.value != '' && !allnumeric(document.createmember.zip2.value) && document.createmember.zip2.value.length!=4){
-			alert('Enter valid Zip Code for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
+		if(document.createmember.zip2.value != '' && (!allnumeric(document.createmember.zip2.value) || document.createmember.zip2.value.length!=4)){
+			alert('Enter valid Zip Code extension for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
 			return false;
 		}
     }

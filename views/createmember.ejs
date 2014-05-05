@@ -82,8 +82,8 @@ $(".memberType").show();
 			return false;
 		}
 		
-		if(document.createmember.zip2.value != '' || !allnumeric(document.createmember.zip2.value) && document.createmember.zip2.value.length!=4){
-			alert('Enter valid Zip Code for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
+		if(document.createmember.zip2.value != '' && (!allnumeric(document.createmember.zip2.value) || document.createmember.zip2.value.length!=4)){
+			alert('Enter valid Zip Code extension for the entered Record. Zip code should be numeric in the following format XXXXX OR XXXXX-XXXX');
 			return false;
 		}
     }
