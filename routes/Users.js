@@ -636,15 +636,15 @@ exports.changePasswordSubmit = function(req, res) {
 			if(newPassword1 != newPassword2) {
 				res.render("\\users\\changepassword",{"userDet":user,"editResults":"Passwords donot match."});
 			} else {
-				Userdb.selectUserById(function(results, error) {
+				Userdb.selectUserByIdPassword(function(results, error) {
 					if(!error && results != null && results.length > 0) {
 						Userdb.editUserPassword(function(results, error){
 							res.render("\\users\\changepassword",{"userDet":user,"editResults":"User's password changed successfully."});
 						}, user.userId, newPassword1);
 					} else {
-						res.render("\\users\\changepassword",{"userDet":user,"editResults":"Error happened on server side."});
+						res.render("\\users\\changepassword",{"userDet":user,"editResults":"Old password not correct."});
 					}
-				},user.userId);
+				},user.userId, oldPassword);
 			}
 		} else {
 			res.render("accessdenied");	
