@@ -9,7 +9,7 @@ var crypto = require('crypto');
  * Uncomment the first line cache not to be used.
  */
 exports.put = function(key,value,timeToKeep){
-	//return null;
+	return null;
 	var oKey = key;
 	var key = crypto.createHash('md5').update(key).digest('hex');
 	console.log('caching: '+key+' at '+currTime());
@@ -37,7 +37,7 @@ exports.clear = function() {
 /**
  * Fetch the value from cache.
  */
-exports.get = function(callback, key) {
+/*exports.get = function(callback, key) {
 	
 	//return null;
 	var oKey = key;
@@ -63,14 +63,14 @@ exports.get = function(callback, key) {
 	} else {
 		callback(null);
 	}
-}
+}*/
 
 /**
  * Comment above code and uncomment below code to run application without caching.
  */
-/*exports.get = function(callback, key) {
+exports.get = function(callback, key) {
 	callback(null);
-}*/
+}
 
 exports.del = function(key) {
 	var key = crypto.createHash('md5').update(key).digest('hex');
