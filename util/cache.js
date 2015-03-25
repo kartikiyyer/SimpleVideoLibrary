@@ -11,7 +11,7 @@ var crypto = require('crypto');
 exports.put = function(key,value,timeToKeep){
 	return null;
 	var oKey = key;
-	var key = crypto.createHash('md5').update(key).digest('hex');
+	//var key = crypto.createHash('md5').update(key).digest('hex');
 	console.log('caching: '+key+' at '+currTime());
 	value = JSON.stringify(value);
 	//var old = cache[key];
@@ -41,7 +41,7 @@ exports.clear = function() {
 	
 	//return null;
 	var oKey = key;
-	var key = crypto.createHash('md5').update(key).digest('hex');
+	//var key = crypto.createHash('md5').update(key).digest('hex');
 	var recFlag = client.hgetall(key);
 	if(recFlag) {	
 		client.hgetall(key, function (err, rec) {
@@ -49,6 +49,7 @@ exports.clear = function() {
 				if(typeof rec != "undefined"){
 					if(rec.expireTime>=currTime()){
 						console.log("Returned "+key+" from cache at "+ currTime());
+						console.log(rec.value);
 						callback(JSON.parse(rec.value));
 					}
 					else {

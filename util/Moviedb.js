@@ -3,7 +3,7 @@
  */
 var mysql = require('./MySQLConnection');
 var cache = require('./cache');
-var cacheTimeout = 60000;
+var cacheTimeout = 600000;
 
 function insertMovie(callback, movieDetails) {
 	var connection = mysql.createdbConnection();

@@ -146,13 +146,13 @@ describe('selectUserByMail',function(){
 
 describe('selectUserByMembershipNo',function(){
 	it('should select users by mail', function(done){
-		var mailId="352138989";
+		var membershipNo="352138989";
 		//console.log();
 		user.selectUserByMembershipNo(function(results,err){
 			console.log('logging mocha');
 	    		  expect(results[0]).to.have.a.property("email","tarunjoshi0385@gmail.com");
 	    	  done();
-	    	},mailId);
+	    	},membershipNo);
 	})
 });
 
